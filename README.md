@@ -1,1 +1,1 @@
-# eecs481DigitalInsturment
+# eecs481DigitalInstrument
