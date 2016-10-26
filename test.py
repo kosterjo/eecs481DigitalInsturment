@@ -10,27 +10,46 @@ from random import random
 
 class DigitalInstrumentWidget(QWidget):
 
-	def keyReleaseEvent(self, event):
-		if event.isAutoRepeat():
-			return
-		print('key released: ' + event.text())
+  def __init__(self):
+    super(DigitalInstrumentWidget, self).__init__()
+    
+    self.initUI()
+    self.initInsturment()
 
-	def keyPressEvent(self, event):
-		if event.isAutoRepeat():
-			return
-		print('key pressed: ' + event.text())
+  def initUI(self):
+    self.resize(500, 300)
+    self.move(300, 300)
+    self.setWindowTitle('EECS 481 Digital Instrument')
+    self.show()
+
+  def initInsturment(self):
+    self.octave = 0;
+
+  def keyReleaseEvent(self, event):
+
+    if event.isAutoRepeat():
+      return
+
+    if event.text() == 'a':
+      self.octave = (self.octave + 1) % 8
+
+    elif event.text() == 'b':
+      self.octave = (self.octave - 1) % 8
+
+    print('key released: ' + event.text())
+
+  def keyPressEvent(self, event):
+    if event.isAutoRepeat():
+      return
+    print('key pressed: ' + event.text())
 
 
 def main():
-	app = QApplication(sys.argv)
+  app = QApplication(sys.argv)
 
-	window = DigitalInstrumentWidget()
-	window.resize(500, 300)
-	window.move(300, 300)
-	window.setWindowTitle('EECS 481 Digital Instrument')
-	window.show()
+  window = DigitalInstrumentWidget()
 
-	sys.exit(app.exec_())
+  sys.exit(app.exec_())
 
 if __name__ == '__main__':
-	main()
+  main()
