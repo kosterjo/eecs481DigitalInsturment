@@ -15,6 +15,7 @@ def write_files(files)
 end
 
 Shoes.app do
+    para "Press 'a', 'b', or 'c' to write a note...\n"
     keydown do |k|
         # Start recording piano key sounds here
         case k
