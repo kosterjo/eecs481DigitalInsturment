@@ -70,6 +70,9 @@ class DigitalInstrumentWidget(QWidget):
     elif event.key() == Qt.Key_7:
       self.octave = 7
 
+    elif event.key() == Qt.Key_Escape:
+      QCoreApplication.quit()
+
     print('key pressed: ' + event.text())
 
 #def keyMapper(self, key, dict):
