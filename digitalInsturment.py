@@ -46,6 +46,30 @@ class DigitalInstrumentWidget(QWidget):
     elif event.key() == Qt.Key_Up:
       self.octave = (self.octave + 1) % 8
 
+    elif event.key() == Qt.Key_0:
+      self.octave = 0
+
+    elif event.key() == Qt.Key_1:
+      self.octave = 1
+
+    elif event.key() == Qt.Key_2:
+      self.octave = 2
+
+    elif event.key() == Qt.Key_3:
+      self.octave = 3
+
+    elif event.key() == Qt.Key_4:
+      self.octave = 4
+
+    elif event.key() == Qt.Key_5:
+      self.octave = 5
+
+    elif event.key() == Qt.Key_6:
+      self.octave = 6
+
+    elif event.key() == Qt.Key_7:
+      self.octave = 7
+
     print('key pressed: ' + event.text())
 
 #def keyMapper(self, key, dict):
