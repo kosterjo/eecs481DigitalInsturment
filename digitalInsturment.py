@@ -72,6 +72,7 @@ class DigitalInstrumentWidget(QWidget):
 
     elif event.key() == Qt.Key_Escape:
       QCoreApplication.quit()
+      return 
 
     print('key pressed: ' + event.text())
 
