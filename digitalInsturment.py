@@ -10,7 +10,6 @@ import sys
 from random import random
 from pygame import key
 
-#self.c.closeApp.emit()
 
 class DigitalInstrumentWidget(QWidget):
 
@@ -28,6 +27,9 @@ class DigitalInstrumentWidget(QWidget):
 
   def initInsturment(self):
     self.octave = 0;
+
+  def keyMapper(self, key):
+    print "key mapper called"
 
   def keyReleaseEvent(self, event):
     if event.isAutoRepeat():
@@ -74,10 +76,10 @@ class DigitalInstrumentWidget(QWidget):
       QCoreApplication.quit()
       return 
 
+    else:
+      self.keyMapper(event.key())
+
     print('key pressed: ' + event.text())
-
-#def keyMapper(self, key, dict):
-
 
 def main():
   app = QApplication(sys.argv)
