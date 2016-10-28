@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 from mingus.core import progressions, intervals
 from mingus.core import chords as ch
 from mingus.containers import NoteContainer, Note
@@ -7,6 +8,9 @@ from mingus.midi import fluidsynth
 import time
 import sys
 from random import random
+from pygame import key
+
+#self.c.closeApp.emit()
 
 class DigitalInstrumentWidget(QWidget):
 
@@ -26,22 +30,25 @@ class DigitalInstrumentWidget(QWidget):
     self.octave = 0;
 
   def keyReleaseEvent(self, event):
-
     if event.isAutoRepeat():
-      return
-
-    if event.text() == 'a':
-      self.octave = (self.octave + 1) % 8
-
-    elif event.text() == 'b':
-      self.octave = (self.octave - 1) % 8
+      return  
 
     print('key released: ' + event.text())
 
   def keyPressEvent(self, event):
     if event.isAutoRepeat():
       return
+
+    #check if clicked key is an unmappable key
+    if event.key() == Qt.Key_Down:
+      self.octave = (self.octave - 1) % 8
+
+    elif event.key() == Qt.Key_Up:
+      self.octave = (self.octave + 1) % 8
+
     print('key pressed: ' + event.text())
+
+#def keyMapper(self, key, dict):
 
 
 def main():
