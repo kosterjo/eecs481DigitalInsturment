@@ -28,13 +28,19 @@ class DigitalInstrumentWidget(QWidget):
   def initInsturment(self):
     self.octave = 0;
 
-    self.notes = 
-    {
+    self.notes = {
       Qt.Key_A: 'C',
+      Qt.Key_S: 'D', 
+      Qt.Key_D: 'E', 
+      Qt.Key_F: 'F',
+      Qt.Key_G: 'G', 
+      Qt.Key_H: 'A',
+      Qt.Key_J: 'B',
+      Qt.Key_K: 'C',
     }
 
   def noteMapper(self, key):
-    print notes[key]
+    print self.notes[key]
 
   def commandMapper(self, key):
  #check if clicked key is an unmappable key
