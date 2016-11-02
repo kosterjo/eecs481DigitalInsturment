@@ -39,49 +39,61 @@ class DigitalInstrumentWidget(QWidget):
       Qt.Key_K: 'C',
     }
 
+    self.commands = {
+      Qt.Key_Down: self.updateOctave,
+    }
+    self.command_args = {
+      Qt.Key_Down: self.octave - 1,
+    }
+
+  def updateOctave(self, value):
+    self.octave = value % 8
+
   def noteMapper(self, key):
     print self.notes[key]
 
   def commandMapper(self, key):
- #check if clicked key is an unmappable key
+  #check if clicked key is an unmappable key
     if key == Qt.Key_Down:
-      self.octave = (self.octave - 1) % 8
+      self.updateOctave(self.octave - 1)
+      print self.octave 
       return True
 
     elif key == Qt.Key_Up:
-      self.octave = (self.octave + 1) % 8
+      self.updateOctave(self.octave + 1)
+      print self.octave 
       return True
 
     elif key == Qt.Key_0:
-      self.octave = 0
+      self.updateOctave(0)
       return True
 
     elif key == Qt.Key_1:
-      self.octave = 1
+      self.updateOctave(1)
       return True
 
     elif key == Qt.Key_2:
-      self.octave = 2
+      self.updateOctave(2)
       return True
 
     elif key == Qt.Key_3:
-      self.octave = 3
+      self.updateOctave(3)
       return True
 
     elif key == Qt.Key_4:
-      self.octave = 4
+      self.updateOctave(4)
       return True
 
     elif key == Qt.Key_5:
-      self.octave = 5
+      self.updateOctave(5)
       return True     
 
     elif key == Qt.Key_6:
-      self.octave = 6
+      self.updateOctave(6)
       return True
 
     elif key == Qt.Key_7:
-      self.octave = 7
+      self.updateOctave(7)
       return True
 
     elif key == Qt.Key_Escape:
