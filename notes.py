@@ -5,7 +5,8 @@ from mingus.midi import fluidsynth
 import time
 import sys
 
-fluidsynth.init("HS Synth Collection I.sf2")
+fluidsynth.init("HS Synth Collection I.sf2", "alsa")
 fluidsynth.play_Note(Note("C-5"))
 time.sleep(10)
 fluidsynth.stop_Note(Note("C-5"), 1)
+
