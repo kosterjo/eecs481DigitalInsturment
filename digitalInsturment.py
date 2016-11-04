@@ -44,8 +44,14 @@ class DigitalInstrumentWidget(QWidget):
       Qt.Key_Down: self.updateOctave,
     }
     self.command_args = {
-      Qt.Key_Down: -1,
-      Qt.Key_Up:   +1,
+      Qt.Key_0: 0,
+      Qt.Key_1: 1,
+      Qt.Key_2: 2,
+      Qt.Key_3: 3,
+      Qt.Key_4: 4,
+      Qt.Key_5: 5,
+      Qt.Key_6: 6,
+      Qt.Key_7: 7,
     }
 
   def updateOctave(self, value):
@@ -53,59 +59,26 @@ class DigitalInstrumentWidget(QWidget):
     print self.command_args
 
   def noteMapper(self, key):
-    print self.notes[key]
+    if key in self.notes:
+      print self.notes[key]
 
   def commandMapper(self, key):
   #check if clicked key is an unmappable key
     if key == Qt.Key_Down:
-      self.updateOctave(self.octave - 1)
-      print self.octave 
+      self.updateOctave(self.octave - 1) 
       return True
 
     elif key == Qt.Key_Up:
       self.updateOctave(self.octave + 1)
-      print self.octave 
       return True
 
-    elif key == Qt.Key_0:
-      self.updateOctave(0)
-      return True
-
-    elif key == Qt.Key_1:
-      self.updateOctave(1)
-      return True
-
-    elif key == Qt.Key_2:
-      self.updateOctave(2)
-      return True
-
-    elif key == Qt.Key_3:
-      self.updateOctave(3)
-      return True
-
-    elif key == Qt.Key_4:
-      self.updateOctave(4)
-      return True
-
-    elif key == Qt.Key_5:
-      self.updateOctave(5)
-      return True     
-
-    elif key == Qt.Key_6:
-      self.updateOctave(6)
-      return True
-
-    elif key == Qt.Key_7:
-      self.updateOctave(7)
-      return True
-
-    elif key == Qt.Key_Escape:
-      QCoreApplication.quit()
+    elif key in self.command_args:
+      argument = self.command_args[key]
+      self.updateOctave(argument)
       return True
 
     else:
       return False
-
 
   def keyReleaseEvent(self, event):
     if event.isAutoRepeat():
