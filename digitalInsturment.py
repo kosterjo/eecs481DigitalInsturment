@@ -29,7 +29,7 @@ class DigitalInstrumentWidget(QWidget):
   def initInsturment(self):
     self.octave = 0;
 
-    self.notes = {
+    self.noteDict = {
       Qt.Key_A: 'C',
       Qt.Key_S: 'D', 
       Qt.Key_D: 'E', 
@@ -40,10 +40,7 @@ class DigitalInstrumentWidget(QWidget):
       Qt.Key_K: 'C',
     }
 
-    self.commands = {
-      Qt.Key_Down: self.updateOctave,
-    }
-    self.command_args = {
+    self.octaveDict = {
       Qt.Key_0: 0,
       Qt.Key_1: 1,
       Qt.Key_2: 2,
@@ -56,11 +53,11 @@ class DigitalInstrumentWidget(QWidget):
 
   def updateOctave(self, value):
     self.octave = value % 8
-    print self.command_args
+    print self.octave
 
   def noteMapper(self, key):
-    if key in self.notes:
-      print self.notes[key]
+    if key in self.noteDict:
+      print self.noteDict[key]
 
   def commandMapper(self, key):
   #check if clicked key is an unmappable key
@@ -72,8 +69,8 @@ class DigitalInstrumentWidget(QWidget):
       self.updateOctave(self.octave + 1)
       return True
 
-    elif key in self.command_args:
-      argument = self.command_args[key]
+    elif key in self.octaveDict:
+      argument = self.octaveDict[key]
       self.updateOctave(argument)
       return True
 
