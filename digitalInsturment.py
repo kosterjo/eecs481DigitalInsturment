@@ -59,6 +59,9 @@ class DigitalInstrumentWidget(QWidget):
     self.octave = value % 8
     print self.octave
 
+  def startNote(self, note):
+    print note + " started"
+
   def noteMapper(self, key):
     if key in self.noteDict:
       return self.noteDict[key]
@@ -103,7 +106,7 @@ class DigitalInstrumentWidget(QWidget):
     note = self.noteMapper(event.key())
     
     if note:
-      print note
+      self.startNote(note)
       return
 
     print "key not mapped"
