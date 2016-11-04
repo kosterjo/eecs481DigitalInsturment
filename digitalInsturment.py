@@ -57,7 +57,7 @@ class DigitalInstrumentWidget(QWidget):
 
   def updateOctave(self, value):
     self.octave = value % 8
-    print self.octave
+    print "Octave: " + str(self.octave)
 
   def startNote(self, note):
     print note + " started"
