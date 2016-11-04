@@ -62,6 +62,9 @@ class DigitalInstrumentWidget(QWidget):
   def startNote(self, note):
     print note + " started"
 
+  def endNote(self, note):
+    print note + " ended"
+
   def noteMapper(self, key):
     if key in self.noteDict:
       return self.noteDict[key]
@@ -94,7 +97,11 @@ class DigitalInstrumentWidget(QWidget):
     if event.isAutoRepeat():
       return  
 
-    print('key released: ' + event.text())
+    note = self.noteMapper(event.key())
+    
+    if note:
+      self.endNote(note)
+      return
 
   def keyPressEvent(self, event):
     if event.isAutoRepeat():
