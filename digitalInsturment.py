@@ -44,11 +44,13 @@ class DigitalInstrumentWidget(QWidget):
       Qt.Key_Down: self.updateOctave,
     }
     self.command_args = {
-      Qt.Key_Down: self.octave - 1,
+      Qt.Key_Down: -1,
+      Qt.Key_Up:   +1,
     }
 
   def updateOctave(self, value):
     self.octave = value % 8
+    print self.command_args
 
   def noteMapper(self, key):
     print self.notes[key]
@@ -104,8 +106,6 @@ class DigitalInstrumentWidget(QWidget):
     else:
       return False
 
-  def keyMapper(self, key):
-    print("key mapper called")
 
   def keyReleaseEvent(self, event):
     if event.isAutoRepeat():
