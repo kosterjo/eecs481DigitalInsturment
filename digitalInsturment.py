@@ -51,6 +51,10 @@ class DigitalInstrumentWidget(QWidget):
       Qt.Key_7: 7,
     }
 
+    self.utilsDict = {
+      Qt.Key_Escape: 'bla'
+    }
+
   def updateOctave(self, value):
     self.octave = value % 8
     print self.octave
@@ -72,6 +76,10 @@ class DigitalInstrumentWidget(QWidget):
     elif key in self.octaveDict:
       argument = self.octaveDict[key]
       self.updateOctave(argument)
+      return True
+
+    elif key == Qt.Key_Escape:
+      QCoreApplication.instance().quit()
       return True
 
     else:
