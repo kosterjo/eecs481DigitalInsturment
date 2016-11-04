@@ -61,7 +61,9 @@ class DigitalInstrumentWidget(QWidget):
 
   def noteMapper(self, key):
     if key in self.noteDict:
-      print self.noteDict[key]
+      return self.noteDict[key]
+
+    return False
 
   def commandMapper(self, key):
   #check if clicked key is an unmappable key
@@ -96,13 +98,15 @@ class DigitalInstrumentWidget(QWidget):
       return
 
     if self.commandMapper(event.key()):
-      print "command"
+      return
 
-    elif self.noteMapper(event.key()):
-      print "note"
+    note = self.noteMapper(event.key())
+    
+    if note:
+      print note
+      return
 
-    else:
-      print "key not mapped"
+    print "key not mapped"
 
   # Called automatically on window resize etc.
   def paintEvent(self, e):
