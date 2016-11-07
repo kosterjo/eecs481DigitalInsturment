@@ -27,19 +27,21 @@ class DigitalInstrumentWidget(QWidget):
     self.show()
 
   def initInsturment(self):
+    #init octave to 0
     self.octave = 0;
 
+    #keys A-K map to notes G-F
     self.noteDict = {
-      Qt.Key_A: 'C',
-      Qt.Key_S: 'D', 
-      Qt.Key_D: 'E', 
-      Qt.Key_F: 'F',
-      Qt.Key_G: 'G', 
-      Qt.Key_H: 'A',
-      Qt.Key_J: 'B',
-      Qt.Key_K: 'C',
+      Qt.Key_A: 'G',
+      Qt.Key_S: 'A', 
+      Qt.Key_D: 'B', 
+      Qt.Key_F: 'C',
+      Qt.Key_G: 'D', 
+      Qt.Key_H: 'E',
+      Qt.Key_J: 'F',
     }
 
+    #init octave dict to map to the number keys
     self.octaveDict = {
       Qt.Key_0: 0,
       Qt.Key_1: 1,
@@ -51,11 +53,13 @@ class DigitalInstrumentWidget(QWidget):
       Qt.Key_7: 7,
     }
 
+    #so far, utils dict only maps esc to quitting
     self.utilsDict = {
       Qt.Key_Escape: QCoreApplication.instance().quit
     }
 
   def updateOctave(self, value):
+    #update octave to value mod 8
     self.octave = value % 8
     print "Octave: " + str(self.octave)
 
@@ -66,57 +70,74 @@ class DigitalInstrumentWidget(QWidget):
     print note + " ended"
 
   def noteMapper(self, key):
+    #if key pressed is mapped to a note, 
+    #return that note, else return false
     if key in self.noteDict:
       return self.noteDict[key]
 
     return False
 
   def commandMapper(self, key):
-  #check if clicked key is an unmappable key
+    #if down pressed, move octave down 1
     if key == Qt.Key_Down:
       self.updateOctave(self.octave - 1) 
       return True
 
+    #if up is pressed, move octave up 1
     elif key == Qt.Key_Up:
       self.updateOctave(self.octave + 1)
       return True
 
+    #if key pressed is mapped to an octave,
+    #change current octave to that key
     elif key in self.octaveDict:
       argument = self.octaveDict[key]
       self.updateOctave(argument)
       return True
 
+    #if key is in the utility dictionary
+    #call function mapped to that key
     elif key in self.utilsDict:
       self.utilsDict[key]()
       return True
 
+    #else key pressed is not a command
     else:
       return False
-
-  def keyReleaseEvent(self, event):
-    if event.isAutoRepeat():
-      return  
-
-    note = self.noteMapper(event.key())
-    
-    if note:
-      self.endNote(note)
-      return
 
   def keyPressEvent(self, event):
     if event.isAutoRepeat():
       return
 
+    #if the key pressed is a command, return
+    #command mapper takes care of the command's actions
     if self.commandMapper(event.key()):
       return
 
+    #note mapper maps a key to a note
+    #returns false if key is not maped to a note
     note = self.noteMapper(event.key())
     
+    #if key is mapped to a note, start the note
     if note:
       self.startNote(note)
       return
 
+    #else the key pressed does nothing currently
     print "key not mapped"
+
+  def keyReleaseEvent(self, event):
+    if event.isAutoRepeat():
+      return  
+
+    #key release only matters for notes
+    #because notes can be held
+    note = self.noteMapper(event.key())
+    
+    #if the key is mapped, end the note
+    if note:
+      self.endNote(note)
+      return
 
   # Called automatically on window resize etc.
   def paintEvent(self, e):
