@@ -42,15 +42,18 @@ class DigitalInstrumentWidget(QWidget):
     }
 
     #init octave dict to map to the number keys
+    #key up and down are special cases caught by updateOctave
     self.octaveDict = {
-      Qt.Key_0: 0,
-      Qt.Key_1: 1,
-      Qt.Key_2: 2,
-      Qt.Key_3: 3,
-      Qt.Key_4: 4,
-      Qt.Key_5: 5,
-      Qt.Key_6: 6,
-      Qt.Key_7: 7,
+      Qt.Key_Up:   -2,
+      Qt.Key_Down: -1,
+      Qt.Key_0:     0,
+      Qt.Key_1:     1,
+      Qt.Key_2:     2,
+      Qt.Key_3:     3,
+      Qt.Key_4:     4,
+      Qt.Key_5:     5,
+      Qt.Key_6:     6,
+      Qt.Key_7:     7,
     }
 
     #so far, utils dict only maps esc to quitting
@@ -59,8 +62,20 @@ class DigitalInstrumentWidget(QWidget):
     }
 
   def updateOctave(self, value):
+    #if value is -2, up key was pressed
+    #so move octave up one step
+    if value == -2:
+      self.octave = (self.octave + 1) % 8
+
+    #if value is -1, down key was pressed
+    #so move octave down one step
+    elif value == -1:
+      self.octave = (self.octave - 1) % 8
+
     #update octave to value mod 8
-    self.octave = value % 8
+    else:
+      self.octave = value % 8
+
     print "Octave: " + str(self.octave)
 
   def startNote(self, note):
@@ -78,19 +93,9 @@ class DigitalInstrumentWidget(QWidget):
     return False
 
   def commandMapper(self, key):
-    #if down pressed, move octave down 1
-    if key == Qt.Key_Down:
-      self.updateOctave(self.octave - 1) 
-      return True
-
-    #if up is pressed, move octave up 1
-    elif key == Qt.Key_Up:
-      self.updateOctave(self.octave + 1)
-      return True
-
     #if key pressed is mapped to an octave,
     #change current octave to that key
-    elif key in self.octaveDict:
+    if key in self.octaveDict:
       argument = self.octaveDict[key]
       self.updateOctave(argument)
       return True
