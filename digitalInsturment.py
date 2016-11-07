@@ -101,14 +101,14 @@ class DigitalInstrumentWidget(QWidget):
     print("Octave: " + str(self.octave))
 
   def startNote(self, note):
-    print(note + " started")
+    print(str(note) + " started")
 
     # Mark the key as pressed for the UI
     #self.pressedKeys['GABCDEF'.index(note)] = True
     #self.repaint()
 
   def endNote(self, note):
-    print(note + " ended")
+    print(str(note) + " ended")
 
     # Mark the key as released for the UI
     #self.pressedKeys['GABCDEF'.index(note)] = False
