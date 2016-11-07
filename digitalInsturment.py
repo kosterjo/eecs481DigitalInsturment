@@ -104,15 +104,15 @@ class DigitalInstrumentWidget(QWidget):
     print(str(note) + " started")
 
     # Mark the key as pressed for the UI
-    #self.pressedKeys['GABCDEF'.index(note)] = True
-    #self.repaint()
+    self.pressedKeys[note.value] = True
+    self.repaint()
 
   def endNote(self, note):
     print(str(note) + " ended")
 
     # Mark the key as released for the UI
-    #self.pressedKeys['GABCDEF'.index(note)] = False
-    #self.repaint()
+    self.pressedKeys[note.value] = False
+    self.repaint()
 
   def noteMapper(self, key):
     #if key pressed is mapped to a note, 
@@ -190,9 +190,10 @@ class DigitalInstrumentWidget(QWidget):
 
     # Draw white keys
     whiteKeyWidth = keyAreaBounds.width() / 7
+    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11]
     for i in range(7):
       # Darken keys if pressed
-      if self.pressedKeys[i]:
+      if self.pressedKeys[whiteKeyIndices[i]]:
         qp.setBrush(Qt.gray)
       else:
         qp.setBrush(Qt.white)
@@ -203,13 +204,14 @@ class DigitalInstrumentWidget(QWidget):
     # Draw black keys
     blackKeyWidth = whiteKeyWidth / 2
     blackKeyHeight = keyAreaBounds.height() * 0.6
+    blackKeyIndices = [1, 3, 6, 8, 10]
     for i in range(5):
       startX = keyAreaBounds.x() + 2 * i * blackKeyWidth + blackKeyWidth * 1.5
       if i > 1:
         startX += whiteKeyWidth
 
       # Darken keys if pressed
-      if self.pressedKeys[i+7]:
+      if self.pressedKeys[blackKeyIndices[i]]:
         qp.setBrush(Qt.gray)
       else:
         qp.setBrush(Qt.black)
