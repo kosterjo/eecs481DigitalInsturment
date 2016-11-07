@@ -1,4 +1,3 @@
-import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QPainter, QBrush
@@ -10,7 +9,22 @@ import time
 import sys
 from random import random
 from pygame import key
+from enum import Enum
 
+
+class Note(Enum):
+  C  = 1
+  Cs = 2
+  D  = 3
+  Ds = 4
+  E  = 5
+  F  = 6
+  Fs = 7
+  G  = 8
+  Gs = 9
+  A  = 10
+  As = 11
+  B  = 12
 
 class DigitalInstrumentWidget(QWidget):
 
