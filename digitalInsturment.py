@@ -16,13 +16,12 @@ class DigitalInstrumentWidget(QWidget):
 
   def __init__(self):
     super(DigitalInstrumentWidget, self).__init__()
-    
     self.initUI()
     self.initInsturment()
 
   def initUI(self):
-    self.resize(500, 300)
-    self.move(300, 300)
+    self.resize(800, 500)
+    self.move(100, 100)
     self.setWindowTitle('EECS 481 Digital Instrument')
     self.show()
 
@@ -62,6 +61,8 @@ class DigitalInstrumentWidget(QWidget):
       Qt.Key_7:     7,
     }
 
+    self.pressedKeys = [False] * 12
+
     #so far, utils dict only maps esc to quitting
     self.utilsDict = {
       Qt.Key_Escape: QCoreApplication.instance().quit
@@ -82,13 +83,21 @@ class DigitalInstrumentWidget(QWidget):
     else:
       self.octave = value % 8
 
-    print "Octave: " + str(self.octave)
+    print("Octave: " + str(self.octave))
 
   def startNote(self, note):
-    print note + " started"
+    print(note + " started")
+
+    # Mark the key as pressed for the UI
+    self.pressedKeys['GABCDEF'.index(note)] = True
+    self.repaint()
 
   def endNote(self, note):
-    print note + " ended"
+    print(note + " ended")
+
+    # Mark the key as released for the UI
+    self.pressedKeys['GABCDEF'.index(note)] = False
+    self.repaint()
 
   def noteMapper(self, key):
     #if key pressed is mapped to a note, 
@@ -135,7 +144,7 @@ class DigitalInstrumentWidget(QWidget):
       return
 
     #else the key pressed does nothing currently
-    print "key not mapped"
+    print("key not mapped")
 
   def keyReleaseEvent(self, event):
     if event.isAutoRepeat():
@@ -150,44 +159,55 @@ class DigitalInstrumentWidget(QWidget):
       self.endNote(note)
       return
 
+  # Draws the piano keys in the window
   # Called automatically on window resize etc.
   def paintEvent(self, e):
     qp = QPainter()
     qp.begin(self)
-    self.drawPianoKeys(qp)
-    qp.end()
-        
-  # Draws the piano keys in the window
-  def drawPianoKeys(self, qp):
+    qp.setBrush(QBrush(Qt.SolidPattern))
     windowWidth = self.size().width()
     windowHeight = self.size().height()
     keyAreaBounds = QRect(windowWidth * 0.1, windowHeight * 0.1, windowWidth * 0.8, windowHeight * 0.8)
 
-    # Brush setup
-    brush = QBrush(Qt.SolidPattern)
-    qp.setBrush(brush)
+    # Make sure the pressedKeys exists
+    if not hasattr(self, 'pressedKeys') or self.pressedKeys is None:
+      self.pressedKeys = [False] * 12
 
     # Draw white keys
-    qp.setBrush(Qt.white)
     whiteKeyWidth = keyAreaBounds.width() / 7
     for i in range(7):
+      # Darken keys if pressed
+      if self.pressedKeys[i]:
+        qp.setBrush(Qt.gray)
+      else:
+        qp.setBrush(Qt.white)
+
+      # Draw the key
       qp.drawRect(QRect(keyAreaBounds.x() + i * whiteKeyWidth, keyAreaBounds.y(), whiteKeyWidth, keyAreaBounds.height()))
 
     # Draw black keys
-    qp.setBrush(Qt.black)
     blackKeyWidth = whiteKeyWidth / 2
     blackKeyHeight = keyAreaBounds.height() * 0.6
     for i in range(5):
       startX = keyAreaBounds.x() + 2 * i * blackKeyWidth + blackKeyWidth * 1.5
       if i > 1:
         startX += whiteKeyWidth
+
+      # Darken keys if pressed
+      if self.pressedKeys[i+7]:
+        qp.setBrush(Qt.gray)
+      else:
+        qp.setBrush(Qt.black)
+
+      # Draw the key
       qp.drawRect(QRect(startX, keyAreaBounds.y(), blackKeyWidth, blackKeyHeight))
+
+    qp.end()
+    
 
 def main():
   app = QApplication(sys.argv)
-
   window = DigitalInstrumentWidget()
-
   sys.exit(app.exec_())
 
 if __name__ == '__main__':
