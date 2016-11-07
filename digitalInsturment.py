@@ -31,14 +31,20 @@ class DigitalInstrumentWidget(QWidget):
     self.octave = 0;
 
     #keys A-K map to notes G-F
+    #keys W, E and T-U map to notes C#-A#
     self.noteDict = {
-      Qt.Key_A: 'G',
-      Qt.Key_S: 'A', 
-      Qt.Key_D: 'B', 
-      Qt.Key_F: 'C',
-      Qt.Key_G: 'D', 
-      Qt.Key_H: 'E',
-      Qt.Key_J: 'F',
+      Qt.Key_A: 'C',
+      Qt.Key_S: 'D', 
+      Qt.Key_D: 'E', 
+      Qt.Key_F: 'F',
+      Qt.Key_G: 'G', 
+      Qt.Key_H: 'A',
+      Qt.Key_J: 'B',
+      Qt.Key_W: 'C#',
+      Qt.Key_E: 'D#',
+      Qt.Key_T: 'F#',
+      Qt.Key_Y: 'G#',
+      Qt.Key_U: 'A#',
     }
 
     #init octave dict to map to the number keys
