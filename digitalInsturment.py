@@ -12,7 +12,7 @@ from pygame import key
 from enum import Enum
 
 
-class Note(Enum):
+class DiscreteNotes(Enum):
   C  = 1
   Cs = 2
   D  = 3
@@ -25,6 +25,7 @@ class Note(Enum):
   A  = 10
   As = 11
   B  = 12
+
 
 class DigitalInstrumentWidget(QWidget):
 
@@ -46,18 +47,18 @@ class DigitalInstrumentWidget(QWidget):
     #keys A-K map to notes G-F
     #keys W, E and T-U map to notes C#-A#
     self.noteDict = {
-      Qt.Key_A: 'C',
-      Qt.Key_S: 'D', 
-      Qt.Key_D: 'E', 
-      Qt.Key_F: 'F',
-      Qt.Key_G: 'G', 
-      Qt.Key_H: 'A',
-      Qt.Key_J: 'B',
-      Qt.Key_W: 'C#',
-      Qt.Key_E: 'D#',
-      Qt.Key_T: 'F#',
-      Qt.Key_Y: 'G#',
-      Qt.Key_U: 'A#',
+      Qt.Key_A: DiscreteNotes.C,
+      Qt.Key_S: DiscreteNotes.D, 
+      Qt.Key_D: DiscreteNotes.E, 
+      Qt.Key_F: DiscreteNotes.F,
+      Qt.Key_G: DiscreteNotes.G, 
+      Qt.Key_H: DiscreteNotes.H,
+      Qt.Key_J: DiscreteNotes.J,
+      Qt.Key_W: DiscreteNotes.Cs,
+      Qt.Key_E: DiscreteNotes.Ds,
+      Qt.Key_T: DiscreteNotes.Fs,
+      Qt.Key_Y: DiscreteNotes.Gs,
+      Qt.Key_U: DiscreteNotes.As,
     }
 
     #init octave dict to map to the number keys
