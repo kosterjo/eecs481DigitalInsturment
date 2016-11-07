@@ -52,8 +52,8 @@ class DigitalInstrumentWidget(QWidget):
       Qt.Key_D: DiscreteNotes.E, 
       Qt.Key_F: DiscreteNotes.F,
       Qt.Key_G: DiscreteNotes.G, 
-      Qt.Key_H: DiscreteNotes.H,
-      Qt.Key_J: DiscreteNotes.J,
+      Qt.Key_H: DiscreteNotes.A,
+      Qt.Key_J: DiscreteNotes.B,
       Qt.Key_W: DiscreteNotes.Cs,
       Qt.Key_E: DiscreteNotes.Ds,
       Qt.Key_T: DiscreteNotes.Fs,
@@ -104,15 +104,15 @@ class DigitalInstrumentWidget(QWidget):
     print(note + " started")
 
     # Mark the key as pressed for the UI
-    self.pressedKeys['GABCDEF'.index(note)] = True
-    self.repaint()
+    #self.pressedKeys['GABCDEF'.index(note)] = True
+    #self.repaint()
 
   def endNote(self, note):
     print(note + " ended")
 
     # Mark the key as released for the UI
-    self.pressedKeys['GABCDEF'.index(note)] = False
-    self.repaint()
+    #self.pressedKeys['GABCDEF'.index(note)] = False
+    #self.repaint()
 
   def noteMapper(self, key):
     #if key pressed is mapped to a note, 
