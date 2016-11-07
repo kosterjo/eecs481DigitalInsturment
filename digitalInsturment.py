@@ -13,7 +13,7 @@ from enum import Enum
 
 
 class DiscreteNotes(Enum):
-  C  = 1
+  C  = 0
   Cs = 2
   D  = 3
   Ds = 4
