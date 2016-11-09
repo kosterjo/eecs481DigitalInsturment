@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import QPainter, QBrush
+from PyQt5.QtGui import QPainter, QBrush, QPalette
 from mingus.core import progressions, intervals
 from mingus.core import chords as ch
 from mingus.containers import NoteContainer, Note
@@ -10,6 +10,12 @@ import sys
 from random import random
 from pygame import key
 from enum import Enum
+
+
+class PianoKeyItem(QGraphicsRectItem):
+  def mousePressEvent(self, event):
+    if hasattr(self, 'note') and self.note is not None:
+      print('clicked: ' + str(self.note))
 
 
 class DiscreteNotes(Enum):
@@ -27,7 +33,7 @@ class DiscreteNotes(Enum):
   B  = 11
 
 
-class DigitalInstrumentWidget(QWidget):
+class DigitalInstrumentWidget(QGraphicsView):
 
   def __init__(self):
     super(DigitalInstrumentWidget, self).__init__()
@@ -39,6 +45,68 @@ class DigitalInstrumentWidget(QWidget):
     self.move(100, 100)
     self.setWindowTitle('EECS 481 Digital Instrument')
     self.show()
+
+    # Set up graphics stuff
+    scene = QGraphicsScene()
+    windowWidth = self.size().width()
+    windowHeight = self.size().height()
+    keyAreaBounds = QRect(windowWidth * 0.1, windowHeight * 0.1, windowWidth * 0.8, windowHeight * 0.8)
+
+    # Draw white keys
+    self.whiteKeys = []
+    whiteKeyWidth = keyAreaBounds.width() / 7
+    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11]
+    for i in range(7):
+      key = PianoKeyItem(keyAreaBounds.x() + i * whiteKeyWidth, keyAreaBounds.y(), whiteKeyWidth, keyAreaBounds.height())
+      key.note = DiscreteNotes(whiteKeyIndices[i])
+      key.setBrush(Qt.white)
+      self.whiteKeys.append(key)
+      scene.addItem(key)
+
+    # Draw black keys
+    self.blackKeys = []
+    blackKeyWidth = whiteKeyWidth / 2
+    blackKeyHeight = keyAreaBounds.height() * 0.6
+    blackKeyIndices = [1, 3, 6, 8, 10]
+    for i in range(5):
+      startX = keyAreaBounds.x() + 2 * i * blackKeyWidth + blackKeyWidth * 1.5
+      if i > 1:
+        startX += whiteKeyWidth
+
+      key = PianoKeyItem(startX, keyAreaBounds.y(), blackKeyWidth, blackKeyHeight)
+      key.note = DiscreteNotes(blackKeyIndices[i])
+      key.setBrush(Qt.black)
+      self.blackKeys.append(key)
+      scene.addItem(key)
+
+    self.setScene(scene)
+
+
+  def updateUI(self):
+    # Make sure the pressedKeys exists
+    if not hasattr(self, 'pressedKeys') or self.pressedKeys is None:
+      self.pressedKeys = [False] * 12
+
+    # Update color of white keys (pressed or not)
+    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11]
+    for i in range(len(self.whiteKeys)):
+      key = self.whiteKeys[i]
+      if self.pressedKeys[whiteKeyIndices[i]]:
+        key.setBrush(Qt.gray)
+      else:
+        key.setBrush(Qt.white)
+
+    # Update color of black keys
+    blackKeyIndices = [1, 3, 6, 8, 10]
+    for i in range(len(self.blackKeys)):
+      key = self.blackKeys[i]
+      if self.pressedKeys[blackKeyIndices[i]]:
+        key.setBrush(Qt.gray)
+      else:
+        key.setBrush(Qt.black)
+
+    self.scene().update(self.scene().sceneRect())
+
 
   def initInsturment(self):
     #init octave to 0
@@ -105,14 +173,14 @@ class DigitalInstrumentWidget(QWidget):
 
     # Mark the key as pressed for the UI
     self.pressedKeys[note.value] = True
-    self.repaint()
+    self.updateUI()
 
   def endNote(self, note):
     print(str(note) + " ended")
 
     # Mark the key as released for the UI
     self.pressedKeys[note.value] = False
-    self.repaint()
+    self.updateUI()
 
   def noteMapper(self, key):
     #if key pressed is mapped to a note, 
@@ -173,53 +241,6 @@ class DigitalInstrumentWidget(QWidget):
     if note:
       self.endNote(note)
       return
-
-  # Draws the piano keys in the window
-  # Called automatically on window resize etc.
-  def paintEvent(self, e):
-    qp = QPainter()
-    qp.begin(self)
-    qp.setBrush(QBrush(Qt.SolidPattern))
-    windowWidth = self.size().width()
-    windowHeight = self.size().height()
-    keyAreaBounds = QRect(windowWidth * 0.1, windowHeight * 0.1, windowWidth * 0.8, windowHeight * 0.8)
-
-    # Make sure the pressedKeys exists
-    if not hasattr(self, 'pressedKeys') or self.pressedKeys is None:
-      self.pressedKeys = [False] * 12
-
-    # Draw white keys
-    whiteKeyWidth = keyAreaBounds.width() / 7
-    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11]
-    for i in range(7):
-      # Darken keys if pressed
-      if self.pressedKeys[whiteKeyIndices[i]]:
-        qp.setBrush(Qt.gray)
-      else:
-        qp.setBrush(Qt.white)
-
-      # Draw the key
-      qp.drawRect(QRect(keyAreaBounds.x() + i * whiteKeyWidth, keyAreaBounds.y(), whiteKeyWidth, keyAreaBounds.height()))
-
-    # Draw black keys
-    blackKeyWidth = whiteKeyWidth / 2
-    blackKeyHeight = keyAreaBounds.height() * 0.6
-    blackKeyIndices = [1, 3, 6, 8, 10]
-    for i in range(5):
-      startX = keyAreaBounds.x() + 2 * i * blackKeyWidth + blackKeyWidth * 1.5
-      if i > 1:
-        startX += whiteKeyWidth
-
-      # Darken keys if pressed
-      if self.pressedKeys[blackKeyIndices[i]]:
-        qp.setBrush(Qt.gray)
-      else:
-        qp.setBrush(Qt.black)
-
-      # Draw the key
-      qp.drawRect(QRect(startX, keyAreaBounds.y(), blackKeyWidth, blackKeyHeight))
-
-    qp.end()
     
 
 def main():
