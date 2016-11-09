@@ -75,7 +75,9 @@ class DigitalInstrumentWidget(QWidget):
       Qt.Key_6:     6,
     }
 
-    self.pressedKeys = [False] * 12
+    self.soundDict = {
+      Qt.Key_F1: "bla",
+    }
 
     #so far, utils dict only maps esc to quitting
     self.utilsDict = {
@@ -128,6 +130,10 @@ class DigitalInstrumentWidget(QWidget):
       argument = self.octaveDict[key]
       self.updateOctave(argument)
       return True
+
+    elif key in self.soundDict:
+      argument = self.soundDict[key]
+      fluidsynth.init(argument, "alsa")
 
     #if key is in the utility dictionary
     #call function mapped to that key
