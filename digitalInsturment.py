@@ -73,7 +73,6 @@ class DigitalInstrumentWidget(QWidget):
       Qt.Key_4:     4,
       Qt.Key_5:     5,
       Qt.Key_6:     6,
-      Qt.Key_7:     7,
     }
 
     self.pressedKeys = [False] * 12
@@ -87,16 +86,16 @@ class DigitalInstrumentWidget(QWidget):
     #if value is -2, up key was pressed
     #so move octave up one step
     if value == -2:
-      self.octave = (self.octave + 1) % 8
+      self.octave = (self.octave + 1) % 7
 
     #if value is -1, down key was pressed
     #so move octave down one step
     elif value == -1:
-      self.octave = (self.octave - 1) % 8
+      self.octave = (self.octave - 1) % 7
 
     #update octave to value mod 8
     else:
-      self.octave = value % 8
+      self.octave = value % 7
 
     print("Octave: " + str(self.octave))
 
