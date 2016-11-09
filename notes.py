@@ -6,11 +6,11 @@ import time
 import sys
 
 fluidsynth.init("HS Synth Collection I.sf2", "alsa")
-n = Note("C-5")
+n = Note("C-9")
 n.channel = 5
 n.velocity = 100
-fluidsynth.play_Note(60)
-fluidsynth.play_Note(Note("C-5"))
+fluidsynth.play_Note(48)
+fluidsynth.play_Note(Note("C-4"))
 #fluidsynth.play_Note(Note("E-5"))
 #fluidsynth.play_Note(Note("G-5"))
 time.sleep(5)

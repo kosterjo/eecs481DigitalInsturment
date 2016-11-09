@@ -10,6 +10,9 @@ import sys
 from random import random
 from pygame import key
 from enum import Enum
+from Sound import Sound
+
+create_sound = Sound()
 
 
 class DiscreteNotes(Enum):
@@ -48,10 +51,10 @@ class DigitalInstrumentWidget(QWidget):
     #keys W, E and T-U map to notes C#-A#
     self.noteDict = {
       Qt.Key_A: DiscreteNotes.C,
-      Qt.Key_S: DiscreteNotes.D, 
-      Qt.Key_D: DiscreteNotes.E, 
+      Qt.Key_S: DiscreteNotes.D,
+      Qt.Key_D: DiscreteNotes.E,
       Qt.Key_F: DiscreteNotes.F,
-      Qt.Key_G: DiscreteNotes.G, 
+      Qt.Key_G: DiscreteNotes.G,
       Qt.Key_H: DiscreteNotes.A,
       Qt.Key_J: DiscreteNotes.B,
       Qt.Key_W: DiscreteNotes.Cs,
@@ -99,6 +102,7 @@ class DigitalInstrumentWidget(QWidget):
     else:
       self.octave = value % 7
 
+    create_sound.set_octave(self.octave)
     print("Octave: " + str(self.octave))
 
   def startNote(self, note):
@@ -107,6 +111,7 @@ class DigitalInstrumentWidget(QWidget):
     # Mark the key as pressed for the UI
     self.pressedKeys[note.value] = True
     self.repaint()
+    create_sound.play_note(note.value)
 
   def endNote(self, note):
     print(str(note) + " ended")
@@ -114,9 +119,10 @@ class DigitalInstrumentWidget(QWidget):
     # Mark the key as released for the UI
     self.pressedKeys[note.value] = False
     self.repaint()
+    create_sound.stop_note(note.value)
 
   def noteMapper(self, key):
-    #if key pressed is mapped to a note, 
+    #if key pressed is mapped to a note,
     #return that note, else return false
     if key in self.noteDict:
       return self.noteDict[key]
@@ -157,7 +163,7 @@ class DigitalInstrumentWidget(QWidget):
     #note mapper maps a key to a note
     #returns false if key is not maped to a note
     note = self.noteMapper(event.key())
-    
+
     #if key is mapped to a note, start the note
     if note:
       self.startNote(note)
@@ -168,12 +174,12 @@ class DigitalInstrumentWidget(QWidget):
 
   def keyReleaseEvent(self, event):
     if event.isAutoRepeat():
-      return  
+      return
 
     #key release only matters for notes
     #because notes can be held
     note = self.noteMapper(event.key())
-    
+
     #if the key is mapped, end the note
     if note:
       self.endNote(note)
@@ -225,9 +231,10 @@ class DigitalInstrumentWidget(QWidget):
       qp.drawRect(QRect(startX, keyAreaBounds.y(), blackKeyWidth, blackKeyHeight))
 
     qp.end()
-    
+
 
 def main():
+  fluidsynth.init("HS Synth Collection I.sf2", "alsa")
   app = QApplication(sys.argv)
   window = DigitalInstrumentWidget()
   sys.exit(app.exec_())
