@@ -6,14 +6,15 @@ import time
 import sys
 
 class Sound(object):
-  self.base_octave = 0
+  base_octave = 0
 
   def set_octave(self, octave):
-    self.base_octave = octave
+    self.base_octave = octave - 3
     return
 
   def convert_note(self, note):
-    play = note + 60 + (8 * self.base_octave)
+    play = note + 48 + (12 * self.base_octave)
+    print(play)
     return play
 
   def play_note(self, note_enum):
