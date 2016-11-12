@@ -79,7 +79,7 @@ class DigitalInstrumentWidget(QWidget):
     }
 
     self.soundDict = {
-      Qt.Key_F1: "bla",
+      Qt.Key_F1: "HS Synth Collection I.sf2",
     }
 
     #so far, utils dict only maps esc to quitting
@@ -138,6 +138,7 @@ class DigitalInstrumentWidget(QWidget):
       return True
 
     elif key in self.soundDict:
+      print "yoyo"
       argument = self.soundDict[key]
       fluidsynth.init(argument, "alsa")
 
