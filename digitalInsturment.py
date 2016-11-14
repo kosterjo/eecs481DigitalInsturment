@@ -71,7 +71,6 @@ class DigitalInstrumentWidget(QGraphicsView):
       key.mappingLabel = QGraphicsTextItem()
       key.mappingLabel.setZValue(100)
       key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()/2, key.boundingRect().y() + key.boundingRect().height()*0.8)
-      key.mappingLabel.setPlainText("A")
       key.mappingLabel.setDefaultTextColor(Qt.black)
       scene.addItem(key.mappingLabel)
 
@@ -96,7 +95,6 @@ class DigitalInstrumentWidget(QGraphicsView):
       key.mappingLabel = QGraphicsTextItem()
       key.mappingLabel.setZValue(100)
       key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()*0.3, key.boundingRect().y() + key.boundingRect().height()*0.8)
-      key.mappingLabel.setPlainText("A")
       key.mappingLabel.setDefaultTextColor(Qt.white)
       scene.addItem(key.mappingLabel)
 
@@ -116,8 +114,6 @@ class DigitalInstrumentWidget(QGraphicsView):
     keyMappings = {}
     for k in self.noteDict:
       keyMappings[self.noteDict[k]] = k
-    
-
 
     # Update color of white keys (pressed or not)
     whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11]
@@ -221,7 +217,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     # Mark the key as released for the UI
     self.pressedKeys[note.value] = False
     self.updateUI()
-    if play_over == True or pedal_pressed == False:
+    if play_over or not pedal_pressed:
       create_sound.stop_note(note.value)
 
   def noteMapper(self, key):
@@ -249,7 +245,7 @@ class DigitalInstrumentWidget(QGraphicsView):
       return True
 
     elif key == Qt.Key_Space:
-      if pedal_pressed == False:
+      if not pedal_pressed:
         pedal_pressed = True
 
       else:
@@ -259,10 +255,7 @@ class DigitalInstrumentWidget(QGraphicsView):
       return True
 
     elif key == Qt.Key_Tab:
-      if play_over == False:
-        play_over = True
-      else:
-        play_over = False
+      play_over = not play_over
       return True
 
     #else key pressed is not a command
@@ -285,7 +278,12 @@ class DigitalInstrumentWidget(QGraphicsView):
     #if key is mapped to a note, start the note
     if note:
       self.startNote(note)
+
+      # Mark the key as pressed for the UI
+      self.pressedKeys[note.value] = False
+      self.updateUI()
       return
+
 
     #else the key pressed does nothing currently
     print("key not mapped")
@@ -301,6 +299,10 @@ class DigitalInstrumentWidget(QGraphicsView):
     #if the key is mapped, end the note
     if note:
       self.endNote(note)
+
+      # Mark the key as released for the UI
+      self.pressedKeys[note.value] = False
+      self.updateUI()
       return
 
 def main():
