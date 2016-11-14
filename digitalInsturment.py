@@ -57,11 +57,11 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     # Draw white keys
     self.whiteKeys = []
-    whiteKeyWidth = keyAreaBounds.width() / 7
-    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11]
-    for i in range(7):
+    whiteKeyWidth = keyAreaBounds.width() / 14
+    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 22]
+    for i in range(14):
       key = PianoKeyItem(keyAreaBounds.x() + i * whiteKeyWidth, keyAreaBounds.y(), whiteKeyWidth, keyAreaBounds.height())
-      key.note = DiscreteNotes(whiteKeyIndices[i])
+      key.note = DiscreteNotes(whiteKeyIndices[i] % 12)
       key.setBrush(Qt.white)
       self.whiteKeys.append(key)
       scene.addItem(key)
@@ -70,14 +70,21 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.blackKeys = []
     blackKeyWidth = whiteKeyWidth / 2
     blackKeyHeight = keyAreaBounds.height() * 0.6
-    blackKeyIndices = [1, 3, 6, 8, 10]
-    for i in range(5):
+    blackKeyIndices = [1, 3, 6, 8, 10, 13, 15, 18, 20, 23]
+    for i in range(10):
       startX = keyAreaBounds.x() + 2 * i * blackKeyWidth + blackKeyWidth * 1.5
-      if i > 1:
+
+      if i > 6:
+        startX += 3*whiteKeyWidth
+
+      elif i > 4:
+        startX += 2*whiteKeyWidth
+
+      elif i > 1:
         startX += whiteKeyWidth
 
       key = PianoKeyItem(startX, keyAreaBounds.y(), blackKeyWidth, blackKeyHeight)
-      key.note = DiscreteNotes(blackKeyIndices[i])
+      key.note = DiscreteNotes(blackKeyIndices[i] % 12)
       key.setBrush(Qt.black)
       self.blackKeys.append(key)
       scene.addItem(key)
@@ -90,10 +97,10 @@ class DigitalInstrumentWidget(QGraphicsView):
   def updateUI(self):
     # Make sure the pressedKeys exists
     if not hasattr(self, 'pressedKeys') or self.pressedKeys is None:
-      self.pressedKeys = [False] * 12
+      self.pressedKeys = [False] * 24
 
     # Update color of white keys (pressed or not)
-    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11]
+    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 22]
     for i in range(len(self.whiteKeys)):
       key = self.whiteKeys[i]
       if self.pressedKeys[whiteKeyIndices[i]]:
@@ -102,7 +109,7 @@ class DigitalInstrumentWidget(QGraphicsView):
         key.setBrush(Qt.white)
 
     # Update color of black keys
-    blackKeyIndices = [1, 3, 6, 8, 10]
+    blackKeyIndices = [1, 3, 6, 8, 10, 13, 15, 18, 20, 23]
     for i in range(len(self.blackKeys)):
       key = self.blackKeys[i]
       if self.pressedKeys[blackKeyIndices[i]]:
