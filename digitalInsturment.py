@@ -14,6 +14,10 @@ from Sound import Sound
 
 create_sound = Sound()
 
+pedal_pressed = False
+
+play_over = False
+
 
 class PianoKeyItem(QGraphicsRectItem):
   def mousePressEvent(self, event):
@@ -217,7 +221,8 @@ class DigitalInstrumentWidget(QGraphicsView):
     # Mark the key as released for the UI
     self.pressedKeys[note.value] = False
     self.updateUI()
-    create_sound.stop_note(note.value)
+    if play_over == True or pedal_pressed == False:
+      create_sound.stop_note(note.value)
 
   def noteMapper(self, key):
     #if key pressed is mapped to a note,
@@ -228,6 +233,8 @@ class DigitalInstrumentWidget(QGraphicsView):
     return False
 
   def commandMapper(self, key):
+    global pedal_pressed
+    global play_over
     #if key pressed is mapped to an octave,
     #change current octave to that key
     if key in self.octaveDict:
@@ -239,6 +246,23 @@ class DigitalInstrumentWidget(QGraphicsView):
     #call function mapped to that key
     elif key in self.utilsDict:
       self.utilsDict[key]()
+      return True
+
+    elif key == Qt.Key_Space:
+      if pedal_pressed == False:
+        pedal_pressed = True
+
+      else:
+        pedal_pressed = False
+        play_over = False
+        create_sound.stop_all()
+      return True
+
+    elif key == Qt.Key_Tab:
+      if play_over == False:
+        play_over = True
+      else:
+        play_over = False
       return True
 
     #else key pressed is not a command

@@ -7,6 +7,7 @@ import sys
 
 class Sound(object):
   base_octave = 0
+  playing_notes = []
 
   def set_octave(self, octave):
     self.base_octave = octave - 3
@@ -18,11 +19,28 @@ class Sound(object):
     return play
 
   def play_note(self, note_enum):
-    fluidsynth.play_Note(self.convert_note(note_enum))
+    play = self.convert_note(note_enum)
+    fluidsynth.play_Note(play)
+    self.playing_notes.append(play)
     return
 
   def stop_note(self, note_enum):
-    fluidsynth.stop_Note(self.convert_note(note_enum), 1)
+    stop = 0
+    play = self.convert_note(note_enum)
+    for note in self.playing_notes:
+      if play == note:
+        stop = note
+        self.playing_notes.remove(note)
+        break
+
+    fluidsynth.stop_Note(stop, 1)
+    return
+
+  def stop_all(self):
+    for note in self.playing_notes:
+      fluidsynth.stop_Note(note, 1)
+
+    del self.playing_notes[:]
     return
 
 Sound()
