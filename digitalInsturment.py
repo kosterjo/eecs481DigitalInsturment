@@ -26,18 +26,30 @@ class PianoKeyItem(QGraphicsRectItem):
 
 
 class DiscreteNotes(Enum):
-  C  = 0
-  Cs = 1
-  D  = 2
-  Ds = 3
-  E  = 4
-  F  = 5
-  Fs = 6
-  G  = 7
-  Gs = 8
-  A  = 9
-  As = 10
-  B  = 11
+  C   = 0
+  Cs  = 1
+  D   = 2
+  Ds  = 3
+  E   = 4
+  F   = 5
+  Fs  = 6
+  G   = 7
+  Gs  = 8
+  A   = 9
+  As  = 10
+  B   = 11
+  C1  = 12
+  Cs1 = 13
+  D1  = 14
+  Ds1 = 15
+  E1  = 16
+  F1  = 17
+  Fs1 = 18
+  G1  = 19
+  Gs1 = 20
+  A1  = 21
+  As1 = 22
+  B1  = 23
 
 
 class DigitalInstrumentWidget(QGraphicsView):
@@ -57,21 +69,21 @@ class DigitalInstrumentWidget(QGraphicsView):
     scene = QGraphicsScene()
     windowWidth = self.size().width()
     windowHeight = self.size().height()
-    keyAreaBounds = QRect(windowWidth * 0.1, windowHeight * 0.1, windowWidth * 0.8, windowHeight * 0.8)
+    keyAreaBounds = QRect(0, 0, windowWidth * .85, windowHeight * 0.4)
 
     # Draw white keys
     self.whiteKeys = []
-    whiteKeyWidth = keyAreaBounds.width() / 7
-    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11]
-    for i in range(7):
+    whiteKeyWidth = keyAreaBounds.width() / 14
+    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 22]
+    for i in range(14):
       key = PianoKeyItem(keyAreaBounds.x() + i * whiteKeyWidth, keyAreaBounds.y(), whiteKeyWidth, keyAreaBounds.height())
-      key.note = DiscreteNotes(whiteKeyIndices[i])
+
+      key.note = DiscreteNotes(whiteKeyIndices[i] % 12)
 
       # Set up key mapping label
       key.mappingLabel = QGraphicsTextItem()
       key.mappingLabel.setZValue(100)
       key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()/2, key.boundingRect().y() + key.boundingRect().height()*0.8)
-      key.mappingLabel.setPlainText("A")
       key.mappingLabel.setDefaultTextColor(Qt.black)
       scene.addItem(key.mappingLabel)
 
@@ -83,20 +95,27 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.blackKeys = []
     blackKeyWidth = whiteKeyWidth / 2
     blackKeyHeight = keyAreaBounds.height() * 0.6
-    blackKeyIndices = [1, 3, 6, 8, 10]
-    for i in range(5):
+    blackKeyIndices = [1, 3, 6, 8, 10, 13, 15, 18, 20, 23]
+    for i in range(10):
       startX = keyAreaBounds.x() + 2 * i * blackKeyWidth + blackKeyWidth * 1.5
-      if i > 1:
+
+      if i > 6:
+        startX += 3*whiteKeyWidth
+
+      elif i > 4:
+        startX += 2*whiteKeyWidth
+
+      elif i > 1:
         startX += whiteKeyWidth
 
       key = PianoKeyItem(startX, keyAreaBounds.y(), blackKeyWidth, blackKeyHeight)
-      key.note = DiscreteNotes(blackKeyIndices[i])
+
+      key.note = DiscreteNotes(blackKeyIndices[i] % 12)
 
       # Set up key mapping label
       key.mappingLabel = QGraphicsTextItem()
       key.mappingLabel.setZValue(100)
       key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()*0.3, key.boundingRect().y() + key.boundingRect().height()*0.8)
-      key.mappingLabel.setPlainText("A")
       key.mappingLabel.setDefaultTextColor(Qt.white)
       scene.addItem(key.mappingLabel)
 
@@ -107,20 +126,22 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.setScene(scene)
     self.updateUI()
 
+    self.updateUI()
+
 
   def updateUI(self):
     # Make sure the pressedKeys exists
     if not hasattr(self, 'pressedKeys') or self.pressedKeys is None:
-      self.pressedKeys = [False] * 12
+      self.pressedKeys = [False] * 24
+
+    print self.pressedKeys
 
     keyMappings = {}
     for k in self.noteDict:
       keyMappings[self.noteDict[k]] = k
-    
-
 
     # Update color of white keys (pressed or not)
-    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11]
+    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23]
     for i in range(len(self.whiteKeys)):
       key = self.whiteKeys[i]
       if self.pressedKeys[whiteKeyIndices[i]]:
@@ -132,7 +153,7 @@ class DigitalInstrumentWidget(QGraphicsView):
       key.mappingLabel.setPlainText(QKeySequence(keyMappings[DiscreteNotes(whiteKeyIndices[i])]).toString())
 
     # Update color of black keys
-    blackKeyIndices = [1, 3, 6, 8, 10]
+    blackKeyIndices = [1, 3, 6, 8, 10, 13, 15, 18, 20, 22]
     for i in range(len(self.blackKeys)):
       key = self.blackKeys[i]
       if self.pressedKeys[blackKeyIndices[i]]:
@@ -148,23 +169,35 @@ class DigitalInstrumentWidget(QGraphicsView):
 
   def initInsturment(self):
     #init octave to 0
-    self.octave = 0;
+    self.octave = 1;
 
     #keys A-K map to notes G-F
     #keys W, E and T-U map to notes C#-A#
     self.noteDict = {
-      Qt.Key_A: DiscreteNotes.C,
-      Qt.Key_S: DiscreteNotes.D,
-      Qt.Key_D: DiscreteNotes.E,
-      Qt.Key_F: DiscreteNotes.F,
-      Qt.Key_G: DiscreteNotes.G,
-      Qt.Key_H: DiscreteNotes.A,
-      Qt.Key_J: DiscreteNotes.B,
-      Qt.Key_W: DiscreteNotes.Cs,
-      Qt.Key_E: DiscreteNotes.Ds,
-      Qt.Key_T: DiscreteNotes.Fs,
-      Qt.Key_Y: DiscreteNotes.Gs,
-      Qt.Key_U: DiscreteNotes.As,
+      Qt.Key_Z: DiscreteNotes.C,
+      Qt.Key_X: DiscreteNotes.D,
+      Qt.Key_C: DiscreteNotes.E,
+      Qt.Key_A: DiscreteNotes.F,
+      Qt.Key_S: DiscreteNotes.G,
+      Qt.Key_D: DiscreteNotes.A,
+      Qt.Key_F: DiscreteNotes.B,
+      Qt.Key_Q: DiscreteNotes.Cs,
+      Qt.Key_W: DiscreteNotes.Ds,
+      Qt.Key_E: DiscreteNotes.Fs,
+      Qt.Key_R: DiscreteNotes.Gs,
+      Qt.Key_T: DiscreteNotes.As,
+      Qt.Key_B: DiscreteNotes.C1,
+      Qt.Key_N: DiscreteNotes.D1,
+      Qt.Key_M: DiscreteNotes.E1,
+      Qt.Key_H: DiscreteNotes.F1,
+      Qt.Key_J: DiscreteNotes.G1,
+      Qt.Key_K: DiscreteNotes.A1,
+      Qt.Key_L: DiscreteNotes.B1,
+      Qt.Key_Y: DiscreteNotes.Cs1,
+      Qt.Key_U: DiscreteNotes.Ds1,
+      Qt.Key_I: DiscreteNotes.Fs1,
+      Qt.Key_O: DiscreteNotes.Gs1,
+      Qt.Key_P: DiscreteNotes.As1,
     }
 
     #init octave dict to map to the number keys
@@ -172,17 +205,16 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.octaveDict = {
       Qt.Key_Up:   -2,
       Qt.Key_Down: -1,
-      Qt.Key_0:     0,
       Qt.Key_1:     1,
       Qt.Key_2:     2,
       Qt.Key_3:     3,
       Qt.Key_4:     4,
       Qt.Key_5:     5,
-      Qt.Key_6:     6,
-      Qt.Key_7:     7,
     }
 
-    self.pressedKeys = [False] * 12
+    self.soundDict = {
+      Qt.Key_F1: "HS Synth Collection I.sf2",
+    }
 
     #so far, utils dict only maps esc to quitting
     self.utilsDict = {
@@ -192,17 +224,17 @@ class DigitalInstrumentWidget(QGraphicsView):
   def updateOctave(self, value):
     #if value is -2, up key was pressed
     #so move octave up one step
-    if value == -2:
-      self.octave = (self.octave + 1) % 8
+    if value == -2 and self.octave < 5:
+      self.octave = (self.octave + 1) % 6
 
     #if value is -1, down key was pressed
     #so move octave down one step
-    elif value == -1:
-      self.octave = (self.octave - 1) % 8
+    elif value == -1 and self.octave > 1:
+      self.octave = (self.octave - 1) % 6
 
     #update octave to value mod 8
     else:
-      self.octave = value % 8
+      self.octave = value % 6
 
     create_sound.set_octave(self.octave)
     print("Octave: " + str(self.octave))
@@ -210,18 +242,11 @@ class DigitalInstrumentWidget(QGraphicsView):
   def startNote(self, note):
     print(str(note) + " started")
 
-    # Mark the key as pressed for the UI
-    self.pressedKeys[note.value] = True
-    self.updateUI()
     create_sound.play_note(note.value)
 
   def endNote(self, note):
     print(str(note) + " ended")
-
-    # Mark the key as released for the UI
-    self.pressedKeys[note.value] = False
-    self.updateUI()
-    if play_over == True or pedal_pressed == False:
+    if play_over or not pedal_pressed:
       create_sound.stop_note(note.value)
 
     else:
@@ -245,6 +270,11 @@ class DigitalInstrumentWidget(QGraphicsView):
       self.updateOctave(argument)
       return True
 
+    elif key in self.soundDict:
+      argument = self.soundDict[key]
+      fluidsynth.init(argument, "alsa")
+      return True
+
     #if key is in the utility dictionary
     #call function mapped to that key
     elif key in self.utilsDict:
@@ -252,7 +282,7 @@ class DigitalInstrumentWidget(QGraphicsView):
       return True
 
     elif key == Qt.Key_Space:
-      if pedal_pressed == False:
+      if not pedal_pressed:
         pedal_pressed = True
 
       else:
@@ -262,10 +292,7 @@ class DigitalInstrumentWidget(QGraphicsView):
       return True
 
     elif key == Qt.Key_Tab:
-      if play_over == False:
-        play_over = True
-      else:
-        play_over = False
+      play_over = not play_over
       return True
 
     #else key pressed is not a command
@@ -288,7 +315,12 @@ class DigitalInstrumentWidget(QGraphicsView):
     #if key is mapped to a note, start the note
     if note:
       self.startNote(note)
+
+      # Mark the key as pressed for the UI
+      self.pressedKeys[note.value] = True
+      self.updateUI()
       return
+
 
     #else the key pressed does nothing currently
     print("key not mapped")
@@ -304,6 +336,10 @@ class DigitalInstrumentWidget(QGraphicsView):
     #if the key is mapped, end the note
     if note:
       self.endNote(note)
+
+      # Mark the key as released for the UI
+      self.pressedKeys[note.value] = False
+      self.updateUI()
       return
 
 def main():
