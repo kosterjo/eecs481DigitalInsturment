@@ -224,8 +224,11 @@ class DigitalInstrumentWidget(QGraphicsView):
   def updateOctave(self, value):
     #if value is -2, up key was pressed
     #so move octave up one step
-    if value == -2 and self.octave < 5:
-      self.octave = (self.octave + 1) % 6
+    if value == -2:
+      if self.octave == 5:
+        self.octave = 1
+      else:
+        self.octave = (self.octave + 1) % 6
 
     #if value is -1, down key was pressed
     #so move octave down one step
