@@ -84,6 +84,8 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     self.setScene(scene)
 
+    self.updateUI()
+
 
   def updateUI(self):
     # Make sure the pressedKeys exists
