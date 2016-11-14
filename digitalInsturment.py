@@ -22,18 +22,30 @@ class PianoKeyItem(QGraphicsRectItem):
 
 
 class DiscreteNotes(Enum):
-  C  = 0
-  Cs = 1
-  D  = 2
-  Ds = 3
-  E  = 4
-  F  = 5
-  Fs = 6
-  G  = 7
-  Gs = 8
-  A  = 9
-  As = 10
-  B  = 11
+  C   = 0
+  Cs  = 1
+  D   = 2
+  Ds  = 3
+  E   = 4
+  F   = 5
+  Fs  = 6
+  G   = 7
+  Gs  = 8
+  A   = 9
+  As  = 10
+  B   = 11
+  C1  = 12
+  Cs1 = 13
+  D1  = 14
+  Ds1 = 15
+  E1  = 16
+  F1  = 17
+  Fs1 = 18
+  G1  = 19
+  Gs1 = 20
+  A1  = 21
+  As1 = 22
+  B1  = 23
 
 
 class DigitalInstrumentWidget(QGraphicsView):
@@ -127,30 +139,30 @@ class DigitalInstrumentWidget(QGraphicsView):
     #keys A-K map to notes G-F
     #keys W, E and T-U map to notes C#-A#
     self.noteDict = {
-      Qt.Key_Z: (DiscreteNotes.C, "left"),
-      Qt.Key_X: (DiscreteNotes.D, "left"),
-      Qt.Key_C: (DiscreteNotes.E, "left"),
-      Qt.Key_A: (DiscreteNotes.F, "left"),
-      Qt.Key_S: (DiscreteNotes.G, "left"),
-      Qt.Key_D: (DiscreteNotes.A, "left"),
-      Qt.Key_F: (DiscreteNotes.B, "left"),
-      Qt.Key_Q: (DiscreteNotes.Cs, "left"),
-      Qt.Key_W: (DiscreteNotes.Ds, "left"),
-      Qt.Key_E: (DiscreteNotes.Fs, "left"),
-      Qt.Key_R: (DiscreteNotes.Gs, "left"),
-      Qt.Key_T: (DiscreteNotes.As, "left"),
-      Qt.Key_B: (DiscreteNotes.C, "right"),
-      Qt.Key_N: (DiscreteNotes.D, "right"),
-      Qt.Key_M: (DiscreteNotes.E, "right"),
-      Qt.Key_H: (DiscreteNotes.F, "right"),
-      Qt.Key_J: (DiscreteNotes.G, "right"),
-      Qt.Key_K: (DiscreteNotes.A, "right"),
-      Qt.Key_L: (DiscreteNotes.B, "right"),
-      Qt.Key_Y: (DiscreteNotes.Cs, "right"),
-      Qt.Key_U: (DiscreteNotes.Ds, "right"),
-      Qt.Key_I: (DiscreteNotes.Fs, "right"),
-      Qt.Key_O: (DiscreteNotes.Gs, "right"),
-      Qt.Key_P: (DiscreteNotes.As, "right"),
+      Qt.Key_Z: DiscreteNotes.C,
+      Qt.Key_X: DiscreteNotes.D,
+      Qt.Key_C: DiscreteNotes.E,
+      Qt.Key_A: DiscreteNotes.F,
+      Qt.Key_S: DiscreteNotes.G,
+      Qt.Key_D: DiscreteNotes.A,
+      Qt.Key_F: DiscreteNotes.B,
+      Qt.Key_Q: DiscreteNotes.Cs,
+      Qt.Key_W: DiscreteNotes.Ds,
+      Qt.Key_E: DiscreteNotes.Fs,
+      Qt.Key_R: DiscreteNotes.Gs,
+      Qt.Key_T: DiscreteNotes.As,
+      Qt.Key_B: DiscreteNotes.C1,
+      Qt.Key_N: DiscreteNotes.D1,
+      Qt.Key_M: DiscreteNotes.E1,
+      Qt.Key_H: DiscreteNotes.F1,
+      Qt.Key_J: DiscreteNotes.G1,
+      Qt.Key_K: DiscreteNotes.A1,
+      Qt.Key_L: DiscreteNotes.B1,
+      Qt.Key_Y: DiscreteNotes.Cs1,
+      Qt.Key_U: DiscreteNotes.Ds1,
+      Qt.Key_I: DiscreteNotes.Fs1,
+      Qt.Key_O: DiscreteNotes.Gs1,
+      Qt.Key_P: DiscreteNotes.As1,
     }
 
     #init octave dict to map to the number keys
@@ -194,7 +206,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     create_sound.set_octave(self.octave)
     print("Octave: " + str(self.octave))
 
-  def startNote(self, note, side):
+  def startNote(self, note):
     print(str(note) + " started")
 
     # Mark the key as pressed for the UI
@@ -202,7 +214,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.updateUI()
     create_sound.play_note(note.value)
 
-  def endNote(self, note, side):
+  def endNote(self, note):
     print(str(note) + " ended")
 
     # Mark the key as released for the UI
@@ -214,9 +226,9 @@ class DigitalInstrumentWidget(QGraphicsView):
     #if key pressed is mapped to a note,
     #return that note, else return false
     if key in self.noteDict:
-      return self.noteDict[key][0], self.noteDict[key][1]
+      return self.noteDict[key]
 
-    return False, False
+    return False
 
   def commandMapper(self, key):
     #if key pressed is mapped to an octave,
@@ -252,11 +264,11 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     #note mapper maps a key to a note
     #returns false if key is not maped to a note
-    note, side = self.noteMapper(event.key())
+    note = self.noteMapper(event.key())
 
     #if key is mapped to a note, start the note
     if note:
-      self.startNote(note, side)
+      self.startNote(note)
       return
 
     #else the key pressed does nothing currently
@@ -268,11 +280,11 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     #key release only matters for notes
     #because notes can be held
-    note, side = self.noteMapper(event.key())
+    note = self.noteMapper(event.key())
 
     #if the key is mapped, end the note
     if note:
-      self.endNote(note, side)
+      self.endNote(note)
       return
 
 def main():
