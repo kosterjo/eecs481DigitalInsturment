@@ -14,7 +14,8 @@ class Sound(object):
 
   def convert_note(self, note):
     play = note + 48 + (12 * self.base_octave)
-    print(play)
+
+    print play
     return play
 
   def play_note(self, note_enum):
