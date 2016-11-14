@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import QPainter, QBrush, QPalette
+from PyQt5.QtGui import QPainter, QBrush, QPalette, QKeySequence
 from mingus.core import progressions, intervals
 from mingus.core import chords as ch
 from mingus.containers import NoteContainer, Note
@@ -44,8 +44,8 @@ class DigitalInstrumentWidget(QGraphicsView):
 
   def __init__(self):
     super(DigitalInstrumentWidget, self).__init__()
-    self.initUI()
     self.initInsturment()
+    self.initUI()
 
   def initUI(self):
     self.resize(800, 500)
@@ -66,6 +66,15 @@ class DigitalInstrumentWidget(QGraphicsView):
     for i in range(7):
       key = PianoKeyItem(keyAreaBounds.x() + i * whiteKeyWidth, keyAreaBounds.y(), whiteKeyWidth, keyAreaBounds.height())
       key.note = DiscreteNotes(whiteKeyIndices[i])
+
+      # Set up key mapping label
+      key.mappingLabel = QGraphicsTextItem()
+      key.mappingLabel.setZValue(100)
+      key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()/2, key.boundingRect().y() + key.boundingRect().height()*0.8)
+      key.mappingLabel.setPlainText("A")
+      key.mappingLabel.setDefaultTextColor(Qt.black)
+      scene.addItem(key.mappingLabel)
+
       key.setBrush(Qt.white)
       self.whiteKeys.append(key)
       scene.addItem(key)
@@ -82,17 +91,33 @@ class DigitalInstrumentWidget(QGraphicsView):
 
       key = PianoKeyItem(startX, keyAreaBounds.y(), blackKeyWidth, blackKeyHeight)
       key.note = DiscreteNotes(blackKeyIndices[i])
+
+      # Set up key mapping label
+      key.mappingLabel = QGraphicsTextItem()
+      key.mappingLabel.setZValue(100)
+      key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()*0.3, key.boundingRect().y() + key.boundingRect().height()*0.8)
+      key.mappingLabel.setPlainText("A")
+      key.mappingLabel.setDefaultTextColor(Qt.white)
+      scene.addItem(key.mappingLabel)
+
       key.setBrush(Qt.black)
       self.blackKeys.append(key)
       scene.addItem(key)
 
     self.setScene(scene)
+    self.updateUI()
 
 
   def updateUI(self):
     # Make sure the pressedKeys exists
     if not hasattr(self, 'pressedKeys') or self.pressedKeys is None:
       self.pressedKeys = [False] * 12
+
+    keyMappings = {}
+    for k in self.noteDict:
+      keyMappings[self.noteDict[k]] = k
+    
+
 
     # Update color of white keys (pressed or not)
     whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11]
@@ -103,6 +128,9 @@ class DigitalInstrumentWidget(QGraphicsView):
       else:
         key.setBrush(Qt.white)
 
+      # Update key mapping string
+      key.mappingLabel.setPlainText(QKeySequence(keyMappings[DiscreteNotes(whiteKeyIndices[i])]).toString())
+
     # Update color of black keys
     blackKeyIndices = [1, 3, 6, 8, 10]
     for i in range(len(self.blackKeys)):
@@ -111,6 +139,9 @@ class DigitalInstrumentWidget(QGraphicsView):
         key.setBrush(Qt.gray)
       else:
         key.setBrush(Qt.black)
+
+      # Update key mapping string
+      key.mappingLabel.setPlainText(QKeySequence(keyMappings[DiscreteNotes(blackKeyIndices[i])]).toString())
 
     self.scene().update(self.scene().sceneRect())
 
