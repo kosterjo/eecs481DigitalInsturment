@@ -111,6 +111,8 @@ class DigitalInstrumentWidget(QGraphicsView):
     if not hasattr(self, 'pressedKeys') or self.pressedKeys is None:
       self.pressedKeys = [False] * 12
 
+    print self.pressedKeys
+
     keyMappings = {}
     for k in self.noteDict:
       keyMappings[self.noteDict[k]] = k
@@ -206,17 +208,10 @@ class DigitalInstrumentWidget(QGraphicsView):
   def startNote(self, note):
     print(str(note) + " started")
 
-    # Mark the key as pressed for the UI
-    self.pressedKeys[note.value] = True
-    self.updateUI()
     create_sound.play_note(note.value)
 
   def endNote(self, note):
     print(str(note) + " ended")
-
-    # Mark the key as released for the UI
-    self.pressedKeys[note.value] = False
-    self.updateUI()
     if play_over or not pedal_pressed:
       create_sound.stop_note(note.value)
 
@@ -280,7 +275,7 @@ class DigitalInstrumentWidget(QGraphicsView):
       self.startNote(note)
 
       # Mark the key as pressed for the UI
-      self.pressedKeys[note.value] = False
+      self.pressedKeys[note.value] = True
       self.updateUI()
       return
 
