@@ -139,6 +139,18 @@ class DigitalInstrumentWidget(QGraphicsView):
       Qt.Key_E: DiscreteNotes.Fs,
       Qt.Key_R: DiscreteNotes.Gs,
       Qt.Key_T: DiscreteNotes.As,
+      Qt.Key_B: DiscreteNotes.C,
+      Qt.Key_N: DiscreteNotes.D,
+      Qt.Key_M: DiscreteNotes.E,
+      Qt.Key_H: DiscreteNotes.F,
+      Qt.Key_J: DiscreteNotes.G,
+      Qt.Key_K: DiscreteNotes.A,
+      Qt.Key_L: DiscreteNotes.B,
+      Qt.Key_Y: DiscreteNotes.Cs,
+      Qt.Key_U: DiscreteNotes.Ds,
+      Qt.Key_I: DiscreteNotes.Fs,
+      Qt.Key_O: DiscreteNotes.Gs,
+      Qt.Key_P: DiscreteNotes.As,
     }
 
     #init octave dict to map to the number keys
