@@ -44,7 +44,7 @@ class Sound(object):
     return
 
   def note_decay(self, note_enum):
-    time.sleep(5)
+    time.sleep(3)
     stop = 0
     play = self.convert_note(note_enum)
     for note in self.playing_notes:
