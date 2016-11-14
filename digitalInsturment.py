@@ -134,7 +134,7 @@ class DigitalInstrumentWidget(QGraphicsView):
 
   def initInsturment(self):
     #init octave to 0
-    self.octave = 0;
+    self.octave = 1;
 
     #keys A-K map to notes G-F
     #keys W, E and T-U map to notes C#-A#
@@ -170,13 +170,11 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.octaveDict = {
       Qt.Key_Up:   -2,
       Qt.Key_Down: -1,
-      Qt.Key_0:     0,
       Qt.Key_1:     1,
       Qt.Key_2:     2,
       Qt.Key_3:     3,
       Qt.Key_4:     4,
       Qt.Key_5:     5,
-      Qt.Key_6:     6,
     }
 
     self.soundDict = {
@@ -191,17 +189,17 @@ class DigitalInstrumentWidget(QGraphicsView):
   def updateOctave(self, value):
     #if value is -2, up key was pressed
     #so move octave up one step
-    if value == -2:
-      self.octave = (self.octave + 1) % 7
+    if value == -2 and self.octave < 5:
+      self.octave = (self.octave + 1) % 6
 
     #if value is -1, down key was pressed
     #so move octave down one step
-    elif value == -1:
-      self.octave = (self.octave - 1) % 7
+    elif value == -1 and self.octave > 1:
+      self.octave = (self.octave - 1) % 6
 
     #update octave to value mod 8
     else:
-      self.octave = value % 7
+      self.octave = value % 6
 
     create_sound.set_octave(self.octave)
     print("Octave: " + str(self.octave))
