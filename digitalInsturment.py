@@ -127,18 +127,18 @@ class DigitalInstrumentWidget(QGraphicsView):
     #keys A-K map to notes G-F
     #keys W, E and T-U map to notes C#-A#
     self.noteDict = {
-      Qt.Key_A: DiscreteNotes.C,
-      Qt.Key_S: DiscreteNotes.D,
-      Qt.Key_D: DiscreteNotes.E,
-      Qt.Key_F: DiscreteNotes.F,
-      Qt.Key_G: DiscreteNotes.G,
-      Qt.Key_H: DiscreteNotes.A,
-      Qt.Key_J: DiscreteNotes.B,
+      Qt.Key_Q: DiscreteNotes.C,
       Qt.Key_W: DiscreteNotes.Cs,
+      Qt.Key_A: DiscreteNotes.D,
       Qt.Key_E: DiscreteNotes.Ds,
-      Qt.Key_T: DiscreteNotes.Fs,
-      Qt.Key_Y: DiscreteNotes.Gs,
-      Qt.Key_U: DiscreteNotes.As,
+      Qt.Key_S: DiscreteNotes.E,
+      Qt.Key_Z: DiscreteNotes.F,
+      Qt.Key_R: DiscreteNotes.Fs,
+      Qt.Key_X: DiscreteNotes.G,
+      Qt.Key_D: DiscreteNotes.Gs,
+      Qt.Key_F: DiscreteNotes.A,
+      Qt.Key_T: DiscreteNotes.As,
+      Qt.Key_C: DiscreteNotes.B,
     }
 
     #init octave dict to map to the number keys
