@@ -206,9 +206,9 @@ class DigitalInstrumentWidget(QGraphicsView):
       return True
 
     elif key in self.soundDict:
-      print "yoyo"
       argument = self.soundDict[key]
       fluidsynth.init(argument, "alsa")
+      return True
 
     #if key is in the utility dictionary
     #call function mapped to that key
