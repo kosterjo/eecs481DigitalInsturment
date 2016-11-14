@@ -53,7 +53,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     scene = QGraphicsScene()
     windowWidth = self.size().width()
     windowHeight = self.size().height()
-    keyAreaBounds = QRect(windowWidth * 0.1, windowHeight * 0.1, windowWidth * 0.8, windowHeight * 0.8)
+    keyAreaBounds = QRect(0, 0, windowWidth * .85, windowHeight * 0.4)
 
     # Draw white keys
     self.whiteKeys = []
