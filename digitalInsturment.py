@@ -193,6 +193,9 @@ class DigitalInstrumentWidget(QGraphicsView):
     if play_over == True or pedal_pressed == False:
       create_sound.stop_note(note.value)
 
+    else:
+      create_sound.note_decay(note.value)
+
   def noteMapper(self, key):
     #if key pressed is mapped to a note,
     #return that note, else return false
