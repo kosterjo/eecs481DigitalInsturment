@@ -81,7 +81,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     for i in range(14):
       key = PianoKeyItem(keyAreaBounds.x() + i * whiteKeyWidth, keyAreaBounds.y(), whiteKeyWidth, keyAreaBounds.height())
 
-      key.note = DiscreteNotes(whiteKeyIndices[i] % 12)
+      key.note = DiscreteNotes(whiteKeyIndices[i])
 
       # Set up key mapping label
       key.mappingLabel = QGraphicsTextItem()
