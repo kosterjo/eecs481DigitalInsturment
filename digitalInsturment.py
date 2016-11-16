@@ -166,11 +166,13 @@ class DigitalInstrumentWidget(QGraphicsView):
     for i in range(len(self.whiteKeys)):
       key = self.whiteKeys[i]
       curNote = key.note
-      # if curNote in mapping_notes:
-      if self.pressedKeys[whiteKeyIndices[i]]:
-        key.setBrush(Qt.gray)
+      if curNote not in mapping_notes:
+        if self.pressedKeys[whiteKeyIndices[i]]:
+          key.setBrush(Qt.gray)
+        else:
+          key.setBrush(Qt.white)
       else:
-        key.setBrush(Qt.white)
+        key.setBrush(Qt.blue)
 
       # Update key mapping string
       key.mappingLabel.setPlainText(QKeySequence(keyMappings[DiscreteNotes(whiteKeyIndices[i])]).toString())
@@ -179,10 +181,14 @@ class DigitalInstrumentWidget(QGraphicsView):
     blackKeyIndices = [1, 3, 6, 8, 10, 13, 15, 18, 20, 22]
     for i in range(len(self.blackKeys)):
       key = self.blackKeys[i]
-      if self.pressedKeys[blackKeyIndices[i]]:
-        key.setBrush(Qt.gray)
+      curNote = key.note
+      if curNote not in mapping_notes:
+        if self.pressedKeys[blackKeyIndices[i]]:
+          key.setBrush(Qt.gray)
+        else:
+          key.setBrush(Qt.black)
       else:
-        key.setBrush(Qt.black)
+        key.setBrush(Qt.blue)
 
       # Update key mapping string
       key.mappingLabel.setPlainText(QKeySequence(keyMappings[DiscreteNotes(blackKeyIndices[i])]).toString())
