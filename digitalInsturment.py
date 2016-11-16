@@ -24,8 +24,8 @@ mapping_notes = []
 class PianoKeyItem(QGraphicsRectItem):
   def mousePressEvent(self, event):
     if hasattr(self, 'note') and self.note is not None:
-      print('clicked: ' + str(self.note))
       mapping_notes.append(self.note)
+      self.updateUI()
 
 
 class DiscreteNotes(Enum):
@@ -126,7 +126,7 @@ class DigitalInstrumentWidget(QGraphicsView):
 
       key = PianoKeyItem(startX, keyAreaBounds.y(), blackKeyWidth, blackKeyHeight)
 
-      key.note = DiscreteNotes(blackKeyIndices[i] % 12)
+      key.note = DiscreteNotes(blackKeyIndices[i])
 
       # Set up key mapping label
       key.mappingLabel = QGraphicsTextItem()
