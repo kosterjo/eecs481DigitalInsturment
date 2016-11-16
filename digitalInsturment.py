@@ -74,15 +74,16 @@ class DigitalInstrumentWidget(QGraphicsView):
     windowHeight = self.size().height()
     keyAreaBounds = QRect(0, 0, windowWidth * .85, windowHeight * 0.4)
 
+    # add labels for current octaves over piano keys
     self.octaveLeft = QGraphicsTextItem("Octave: " + str(self.octave))
     self.octaveLeft.setZValue(100)
-    self.octaveLeft.setPos(150, -20)
+    self.octaveLeft.setPos(150, -30)
     self.octaveLeft.adjustSize()
     scene.addItem(self.octaveLeft)
 
     self.octaveRight = QGraphicsTextItem("Octave: " + str(self.octave + 1))
     self.octaveRight.setZValue(100)
-    self.octaveRight.setPos(475, -20)
+    self.octaveRight.setPos(475, -30)
     scene.addItem(self.octaveRight)
 
     # Draw white keys
