@@ -71,6 +71,17 @@ class DigitalInstrumentWidget(QGraphicsView):
     windowHeight = self.size().height()
     keyAreaBounds = QRect(0, 0, windowWidth * .85, windowHeight * 0.4)
 
+    self.octaveLeft = QGraphicsTextItem("Octave: " + str(self.octave))
+    self.octaveLeft.setZValue(100)
+    self.octaveLeft.setPos(150, -20)
+    self.octaveLeft.adjustSize()
+    scene.addItem(self.octaveLeft)
+
+    self.octaveRight = QGraphicsTextItem("Octave: " + str(self.octave + 1))
+    self.octaveRight.setZValue(100)
+    self.octaveRight.setPos(475, -20)
+    scene.addItem(self.octaveRight)
+
     # Draw white keys
     self.whiteKeys = []
     whiteKeyWidth = keyAreaBounds.width() / 14
@@ -134,7 +145,11 @@ class DigitalInstrumentWidget(QGraphicsView):
     if not hasattr(self, 'pressedKeys') or self.pressedKeys is None:
       self.pressedKeys = [False] * 24
 
-    print self.pressedKeys
+    #print self.pressedKeys
+
+    #update octaves seen on screen
+    self.octaveLeft.setPlainText("Octave: " + str(self.octave))
+    self.octaveRight.setPlainText("Octave: " + str(self.octave + 1))
 
     keyMappings = {}
     for k in self.noteDict:
@@ -239,8 +254,9 @@ class DigitalInstrumentWidget(QGraphicsView):
     else:
       self.octave = value % 6
 
+    self.updateUI()
+
     create_sound.set_octave(self.octave)
-    print("Octave: " + str(self.octave))
 
   def startNote(self, note):
     print(str(note) + " started")
