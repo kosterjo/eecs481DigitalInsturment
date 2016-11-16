@@ -80,7 +80,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.reset_button.setText('Reset Mappings')
     self.reset_button.show()
     self.reset_button.clicked.connect(self.resetButton)
-    self.layout.addWidget(self.reset_button)
+    self.layout.addWidget(self.reset_button, 100, Qt.AlignLeft)
     self.setLayout(self.layout)
 
     # add labels for current octaves over piano keys
@@ -404,6 +404,9 @@ class DigitalInstrumentWidget(QGraphicsView):
 
   def resetButton(self):
     print("Reset Button Pressed")
+    mapping_notes = []
+    self.customMapping = {}
+    #TODO: when we change ui around mapping, reset that here
     return
 
 def main():
