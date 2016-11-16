@@ -83,7 +83,8 @@ class DigitalInstrumentWidget(QGraphicsView):
       # Set up key mapping label
       key.mappingLabel = QGraphicsTextItem()
       key.mappingLabel.setZValue(100)
-      key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()/2, key.boundingRect().y() + key.boundingRect().height()*0.8)
+      key.mappingLabel.setPlainText('A')
+      key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()/2 - key.mappingLabel.boundingRect().width()/2, key.boundingRect().y() + key.boundingRect().height()*0.8)
       key.mappingLabel.setDefaultTextColor(Qt.black)
       scene.addItem(key.mappingLabel)
 
@@ -115,7 +116,8 @@ class DigitalInstrumentWidget(QGraphicsView):
       # Set up key mapping label
       key.mappingLabel = QGraphicsTextItem()
       key.mappingLabel.setZValue(100)
-      key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()*0.3, key.boundingRect().y() + key.boundingRect().height()*0.8)
+      key.mappingLabel.setPlainText('A')
+      key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()/2 - key.mappingLabel.boundingRect().width()/2, key.boundingRect().y() + key.boundingRect().height()*0.8)
       key.mappingLabel.setDefaultTextColor(Qt.white)
       scene.addItem(key.mappingLabel)
 
