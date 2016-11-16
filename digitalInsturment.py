@@ -18,11 +18,14 @@ pedal_pressed = False
 
 play_over = False
 
+mapping_notes = []
+
 
 class PianoKeyItem(QGraphicsRectItem):
   def mousePressEvent(self, event):
     if hasattr(self, 'note') and self.note is not None:
       print('clicked: ' + str(self.note))
+      mapping_notes.append(self.note)
 
 
 class DiscreteNotes(Enum):
@@ -221,6 +224,8 @@ class DigitalInstrumentWidget(QGraphicsView):
       Qt.Key_Escape: QCoreApplication.instance().quit
     }
 
+    self.customMapping = {}
+
   def updateOctave(self, value):
     #if value is -2, up key was pressed
     #so move octave up one step
@@ -250,32 +255,49 @@ class DigitalInstrumentWidget(QGraphicsView):
       create_sound.stop_note(note.value)
 
   def noteMapper(self, key):
+    #check custom mapping first, so it takes priority
+    notes = []
+    if key in self.customMapping:
+      notes = self.customMapping[key]
+
     #if key pressed is mapped to a note,
     #return that note, else return false
     if key in self.noteDict:
-      return self.noteDict[key]
+      notes.append(self.noteDict[key])
 
-    return False
+    return notes
 
   def commandMapper(self, key):
     global pedal_pressed
     global play_over
+    global mapping_notes
+
+    #if key is in the utility dictionary
+    #call function mapped to that key
+    if key in self.utilsDict:
+      self.utilsDict[key]()
+      return True
+
     #if key pressed is mapped to an octave,
     #change current octave to that key
-    if key in self.octaveDict:
+    elif key in self.octaveDict:
       argument = self.octaveDict[key]
       self.updateOctave(argument)
       return True
 
+    #If we already started mapping notes by clicking on keys,
+    #map the clicked notes the the pressed key, stop mapping,
+    #then return False so that the note can be played
+    elif mapping_notes:
+      print 'mapping notes: ' + str(mapping_notes)
+      self.customMapping[key] = mapping_notes
+      print self.customMapping[key]
+      mapping_notes = []
+      return False
+
     elif key in self.soundDict:
       argument = self.soundDict[key]
       fluidsynth.init(argument, "alsa")
-      return True
-
-    #if key is in the utility dictionary
-    #call function mapped to that key
-    elif key in self.utilsDict:
-      self.utilsDict[key]()
       return True
 
     elif key == Qt.Key_Space:
@@ -307,20 +329,20 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     #note mapper maps a key to a note
     #returns false if key is not maped to a note
-    note = self.noteMapper(event.key())
+    notes = self.noteMapper(event.key())
 
     #if key is mapped to a note, start the note
-    if note:
+    for note in notes:
+      print 'Prinring notes:' + str(note)
       self.startNote(note)
 
       # Mark the key as pressed for the UI
       self.pressedKeys[note.value] = True
       self.updateUI()
-      return
 
-
-    #else the key pressed does nothing currently
-    print("key not mapped")
+    if not notes:
+      #else the key pressed does nothing currently
+      print("key not mapped")
 
   def keyReleaseEvent(self, event):
     if event.isAutoRepeat():
@@ -328,16 +350,15 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     #key release only matters for notes
     #because notes can be held
-    note = self.noteMapper(event.key())
+    notes = self.noteMapper(event.key())
 
     #if the key is mapped, end the note
-    if note:
+    for note in notes:
       self.endNote(note)
 
       # Mark the key as released for the UI
       self.pressedKeys[note.value] = False
       self.updateUI()
-      return
 
 def main():
   fluidsynth.init("HS Synth Collection I.sf2", "alsa")
