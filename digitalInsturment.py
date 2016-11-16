@@ -25,7 +25,7 @@ class PianoKeyItem(QGraphicsRectItem):
   def mousePressEvent(self, event):
     if hasattr(self, 'note') and self.note is not None:
       mapping_notes.append(self.note)
-      self.updateUI()
+      self.instrumentWidget.updateUI()
 
 
 class DiscreteNotes(Enum):
@@ -80,6 +80,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 22]
     for i in range(14):
       key = PianoKeyItem(keyAreaBounds.x() + i * whiteKeyWidth, keyAreaBounds.y(), whiteKeyWidth, keyAreaBounds.height())
+      key.instrumentWidget = self
 
       key.note = DiscreteNotes(whiteKeyIndices[i])
 
@@ -113,6 +114,7 @@ class DigitalInstrumentWidget(QGraphicsView):
         startX += whiteKeyWidth
 
       key = PianoKeyItem(startX, keyAreaBounds.y(), blackKeyWidth, blackKeyHeight)
+      key.instrumentWidget = self
 
       key.note = DiscreteNotes(blackKeyIndices[i])
 
@@ -131,8 +133,6 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.setScene(scene)
     self.updateUI()
 
-    self.updateUI()
-
 
   def updateUI(self):
     # Make sure the pressedKeys exists
@@ -149,6 +149,8 @@ class DigitalInstrumentWidget(QGraphicsView):
     whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23]
     for i in range(len(self.whiteKeys)):
       key = self.whiteKeys[i]
+      curNote = key.note
+      # if curNote in mapping_notes:
       if self.pressedKeys[whiteKeyIndices[i]]:
         key.setBrush(Qt.gray)
       else:
