@@ -24,8 +24,8 @@ mapping_notes = []
 class PianoKeyItem(QGraphicsRectItem):
   def mousePressEvent(self, event):
     if hasattr(self, 'note') and self.note is not None:
-      print('clicked: ' + str(self.note))
       mapping_notes.append(self.note)
+      self.instrumentWidget.updateUI()
 
 
 class DiscreteNotes(Enum):
@@ -83,14 +83,27 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.layout.addWidget(self.reset_button)
     self.setLayout(self.layout)
 
+    # add labels for current octaves over piano keys
+    self.octaveLeft = QGraphicsTextItem("Octave: " + str(self.octave))
+    self.octaveLeft.setZValue(100)
+    self.octaveLeft.setPos(150, -30)
+    self.octaveLeft.adjustSize()
+    scene.addItem(self.octaveLeft)
+
+    self.octaveRight = QGraphicsTextItem("Octave: " + str(self.octave + 1))
+    self.octaveRight.setZValue(100)
+    self.octaveRight.setPos(475, -30)
+    scene.addItem(self.octaveRight)
+
     # Draw white keys
     self.whiteKeys = []
     whiteKeyWidth = keyAreaBounds.width() / 14
     whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 22]
     for i in range(14):
       key = PianoKeyItem(keyAreaBounds.x() + i * whiteKeyWidth, keyAreaBounds.y(), whiteKeyWidth, keyAreaBounds.height())
+      key.instrumentWidget = self
 
-      key.note = DiscreteNotes(whiteKeyIndices[i] % 12)
+      key.note = DiscreteNotes(whiteKeyIndices[i])
 
       # Set up key mapping label
       key.mappingLabel = QGraphicsTextItem()
@@ -122,8 +135,9 @@ class DigitalInstrumentWidget(QGraphicsView):
         startX += whiteKeyWidth
 
       key = PianoKeyItem(startX, keyAreaBounds.y(), blackKeyWidth, blackKeyHeight)
+      key.instrumentWidget = self
 
-      key.note = DiscreteNotes(blackKeyIndices[i] % 12)
+      key.note = DiscreteNotes(blackKeyIndices[i])
 
       # Set up key mapping label
       key.mappingLabel = QGraphicsTextItem()
@@ -140,15 +154,17 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.setScene(scene)
     self.updateUI()
 
-    self.updateUI()
-
 
   def updateUI(self):
     # Make sure the pressedKeys exists
     if not hasattr(self, 'pressedKeys') or self.pressedKeys is None:
       self.pressedKeys = [False] * 24
 
-    print self.pressedKeys
+    #print self.pressedKeys
+
+    #update octaves seen on screen
+    self.octaveLeft.setPlainText("Octave: " + str(self.octave))
+    self.octaveRight.setPlainText("Octave: " + str(self.octave + 1))
 
     keyMappings = {}
     for k in self.noteDict:
@@ -158,6 +174,8 @@ class DigitalInstrumentWidget(QGraphicsView):
     whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23]
     for i in range(len(self.whiteKeys)):
       key = self.whiteKeys[i]
+      curNote = key.note
+      # if curNote in mapping_notes:
       if self.pressedKeys[whiteKeyIndices[i]]:
         key.setBrush(Qt.gray)
       else:
@@ -255,8 +273,9 @@ class DigitalInstrumentWidget(QGraphicsView):
     else:
       self.octave = value % 6
 
+    self.updateUI()
+
     create_sound.set_octave(self.octave)
-    print("Octave: " + str(self.octave))
 
   def startNote(self, note):
     print(str(note) + " started")
