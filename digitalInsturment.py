@@ -71,6 +71,12 @@ class DigitalInstrumentWidget(QGraphicsView):
     windowHeight = self.size().height()
     keyAreaBounds = QRect(0, 0, windowWidth * .85, windowHeight * 0.4)
 
+    # Reset Key Mappings Buttons
+    layout = QVBoxLayout()
+    self.reset_button = QPushButton('reset', self)
+    self.reset_button.clicked.connect(self.resetButton)
+    layout.addWidget(self.reset_button)
+
     # Draw white keys
     self.whiteKeys = []
     whiteKeyWidth = keyAreaBounds.width() / 14
@@ -344,6 +350,10 @@ class DigitalInstrumentWidget(QGraphicsView):
       self.pressedKeys[note.value] = False
       self.updateUI()
       return
+
+  def resetButton(self):
+    print("Reset Button Pressed")
+    return
 
 def main():
   fluidsynth.init("HS Synth Collection I.sf2", "alsa")
