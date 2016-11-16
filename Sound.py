@@ -11,6 +11,7 @@ class Sound(object):
 
   def set_octave(self, octave):
     self.base_octave = octave - 3
+    print('set octave: ' + str(self.base_octave))
     return
 
   def convert_note(self, note):
