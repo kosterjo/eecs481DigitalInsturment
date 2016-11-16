@@ -86,7 +86,8 @@ class DigitalInstrumentWidget(QGraphicsView):
       # Set up key mapping label
       key.mappingLabel = QGraphicsTextItem()
       key.mappingLabel.setZValue(100)
-      key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()/2, key.boundingRect().y() + key.boundingRect().height()*0.8)
+      key.mappingLabel.setPlainText('A')
+      key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()/2 - key.mappingLabel.boundingRect().width()/2, key.boundingRect().y() + key.boundingRect().height()*0.8)
       key.mappingLabel.setDefaultTextColor(Qt.black)
       scene.addItem(key.mappingLabel)
 
@@ -118,7 +119,8 @@ class DigitalInstrumentWidget(QGraphicsView):
       # Set up key mapping label
       key.mappingLabel = QGraphicsTextItem()
       key.mappingLabel.setZValue(100)
-      key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()*0.3, key.boundingRect().y() + key.boundingRect().height()*0.8)
+      key.mappingLabel.setPlainText('A')
+      key.mappingLabel.setPos(key.boundingRect().x() + key.boundingRect().width()/2 - key.mappingLabel.boundingRect().width()/2, key.boundingRect().y() + key.boundingRect().height()*0.8)
       key.mappingLabel.setDefaultTextColor(Qt.white)
       scene.addItem(key.mappingLabel)
 
@@ -229,8 +231,11 @@ class DigitalInstrumentWidget(QGraphicsView):
   def updateOctave(self, value):
     #if value is -2, up key was pressed
     #so move octave up one step
-    if value == -2 and self.octave < 5:
-      self.octave = (self.octave + 1) % 6
+    if value == -2:
+      if self.octave == 5:
+        self.octave = 1
+      else:
+        self.octave = (self.octave + 1) % 6
 
     #if value is -1, down key was pressed
     #so move octave down one step
