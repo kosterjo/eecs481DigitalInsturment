@@ -84,6 +84,13 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.layout.addSpacerItem(QSpacerItem(100, 500))
     self.setLayout(self.layout)
 
+    #add chord mappings to gui
+    self.chordMappings = QGraphicsTextItem("Chord Mappings:" + '\n' + "None")
+    self.chordMappings.setZValue(100)
+    self.chordMappings.setPos(0, -300)
+    self.chordMappings.adjustSize()
+    scene.addItem(self.chordMappings)
+
     # add labels for current octaves over piano keys
     self.octaveLeft = QGraphicsTextItem("Octave: " + str(self.octave))
     self.octaveLeft.setZValue(100)
@@ -123,6 +130,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     blackKeyWidth = whiteKeyWidth / 2
     blackKeyHeight = keyAreaBounds.height() * 0.6
     blackKeyIndices = [1, 3, 6, 8, 10, 13, 15, 18, 20, 23]
+
     for i in range(10):
       startX = keyAreaBounds.x() + 2 * i * blackKeyWidth + blackKeyWidth * 1.5
 
@@ -159,7 +167,19 @@ class DigitalInstrumentWidget(QGraphicsView):
     if not hasattr(self, 'pressedKeys') or self.pressedKeys is None:
       self.pressedKeys = [False] * 24
 
-    #print self.pressedKeys
+    chordMapString = "Chord Mappings:" + '\n'
+
+    #print self.customMapping
+
+    if self.customMapping: 
+      for chord in self.customMapping:
+        chordMapString += str(self.customMapping[chord])
+        chordMapString += '\n'
+
+    else:
+      chordMapString += "None"
+
+    self.chordMappings.setPlainText(chordMapString)
 
     #update octaves seen on screen
     self.octaveLeft.setPlainText("Octave: " + str(self.octave))
@@ -303,7 +323,7 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     #if key pressed is mapped to a note,
     #return that note, else return false
-    if key in self.noteDict:
+    elif key in self.noteDict:
       notes.append(self.noteDict[key])
 
     return notes
@@ -405,7 +425,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     print("Reset Button Pressed")
     mapping_notes = []
     self.customMapping = {}
-    #TODO: when we change ui around mapping, reset that here
+    self.updateUI()
     return
 
 def main():
