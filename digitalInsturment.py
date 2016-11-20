@@ -80,7 +80,8 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.reset_button.setText('Reset Mappings')
     self.reset_button.show()
     self.reset_button.clicked.connect(self.resetButton)
-    self.layout.addWidget(self.reset_button, 100, Qt.AlignLeft)
+    self.layout.addWidget(self.reset_button, 100, Qt.AlignCenter)
+    self.layout.addSpacerItem(QSpacerItem(100, 500))
     self.setLayout(self.layout)
 
     # add labels for current octaves over piano keys
@@ -127,10 +128,8 @@ class DigitalInstrumentWidget(QGraphicsView):
 
       if i > 6:
         startX += 3*whiteKeyWidth
-
       elif i > 4:
         startX += 2*whiteKeyWidth
-
       elif i > 1:
         startX += whiteKeyWidth
 
