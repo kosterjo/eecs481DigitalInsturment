@@ -169,12 +169,15 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     chordMapString = "Chord Mappings:" + '\n'
 
-    #print self.customMapping
-
     if self.customMapping: 
-      for chord in self.customMapping:
-        chordMapString += str(self.customMapping[chord])
-        chordMapString += '\n'
+      for key in self.customMapping:
+        chordMapString += chr(key) + ': '
+
+        for chord in self.customMapping[key]:
+          chordMapString += chord.name
+          chordMapString += ", "
+
+        chordMapString += '\n\n' 
 
     else:
       chordMapString += "None"
