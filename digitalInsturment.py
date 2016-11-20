@@ -78,6 +78,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     self.layout = QVBoxLayout()
     self.reset_button = QPushButton()
     self.reset_button.setText('Reset Mappings')
+    #QShortcut(QKeySequence(Qt.Key_AsciiTilde), self.reset_button, self.resetButton())
     self.reset_button.show()
     self.reset_button.clicked.connect(self.resetButton)
     self.layout.addWidget(self.reset_button, 100, Qt.AlignCenter)
@@ -169,7 +170,7 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     chordMapString = "Chord Mappings:" + '\n'
 
-    if self.customMapping: 
+    if self.customMapping:
       for key in self.customMapping:
         chordMapString += chr(key) + ': '
 
@@ -177,7 +178,7 @@ class DigitalInstrumentWidget(QGraphicsView):
           chordMapString += chord.name
           chordMapString += ", "
 
-        chordMapString += '\n\n' 
+        chordMapString += '\n\n'
 
     else:
       chordMapString += "None"
@@ -315,8 +316,8 @@ class DigitalInstrumentWidget(QGraphicsView):
     if play_over or not pedal_pressed:
       create_sound.stop_note(note.value)
 
-    else:
-      create_sound.note_decay(note.value)
+    #else:
+    #  create_sound.note_decay(note.value)
 
   def noteMapper(self, key):
     #check custom mapping first, so it takes priority
@@ -374,7 +375,7 @@ class DigitalInstrumentWidget(QGraphicsView):
         create_sound.stop_all()
       return True
 
-    elif key == Qt.Key_Tab:
+    elif key == Qt.Key_Tab or key == Qt.Key_CapsLock:
       play_over = not play_over
       return True
 
