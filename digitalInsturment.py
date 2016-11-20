@@ -284,6 +284,13 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     self.customMapping = {}
 
+    self.reservedKeys = [
+      Qt.Key_Escape,
+      Qt.Key_Space,
+      Qt.Key_Tab,
+      Qt.Key_CapsLock,
+    ]
+
   def updateOctave(self, value):
     #if value is -2, up key was pressed
     #so move octave up one step
@@ -353,7 +360,7 @@ class DigitalInstrumentWidget(QGraphicsView):
     #If we already started mapping notes by clicking on keys,
     #map the clicked notes the the pressed key, stop mapping,
     #then return False so that the note can be played
-    elif mapping_notes:
+    elif mapping_notes and key not in self.reservedKeys:
       print 'mapping notes: ' + str(mapping_notes)
       self.customMapping[key] = mapping_notes
       print self.customMapping[key]
