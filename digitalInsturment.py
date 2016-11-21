@@ -29,30 +29,30 @@ class PianoKeyItem(QGraphicsRectItem):
 
 
 class DiscreteNotes(Enum):
-  C   = 0
-  Cs  = 1
-  D   = 2
-  Ds  = 3
-  E   = 4
-  F   = 5
-  Fs  = 6
-  G   = 7
-  Gs  = 8
-  A   = 9
-  As  = 10
-  B   = 11
-  C1  = 12
-  Cs1 = 13
-  D1  = 14
-  Ds1 = 15
-  E1  = 16
-  F1  = 17
-  Fs1 = 18
-  G1  = 19
-  Gs1 = 20
-  A1  = 21
-  As1 = 22
-  B1  = 23
+  C0   = 0
+  Cs0  = 1
+  D0   = 2
+  Ds0  = 3
+  E0   = 4
+  F0   = 5
+  Fs0  = 6
+  G0   = 7
+  Gs0  = 8
+  A0   = 9
+  As0  = 10
+  B0   = 11
+  C1   = 12
+  Cs1  = 13
+  D1   = 14
+  Ds1  = 15
+  E1   = 16
+  F1   = 17
+  Fs1  = 18
+  G1   = 19
+  Gs1  = 20
+  A1   = 21
+  As1  = 22
+  B1   = 23
 
 
 class DigitalInstrumentWidget(QGraphicsView):
@@ -207,7 +207,14 @@ class DigitalInstrumentWidget(QGraphicsView):
         key.setBrush(Qt.blue)
 
       # Update key mapping string
-      key.mappingLabel.setPlainText(QKeySequence(keyMappings[DiscreteNotes(whiteKeyIndices[i])]).toString())
+      note = DiscreteNotes(whiteKeyIndices[i])
+      key.mappingLabel.setPlainText(QKeySequence(keyMappings[note]).toString())
+      for k, v in self.customMapping.iteritems():
+        if str(note) in str(v):
+          key.mappingLabel.setPlainText(QKeySequence(k).toString())
+          break
+        elif keyMappings[note] == k:
+          key.mappingLabel.setPlainText("")
 
     # Update color of black keys
     blackKeyIndices = [1, 3, 6, 8, 10, 13, 15, 18, 20, 22]
@@ -223,7 +230,16 @@ class DigitalInstrumentWidget(QGraphicsView):
         key.setBrush(Qt.blue)
 
       # Update key mapping string
-      key.mappingLabel.setPlainText(QKeySequence(keyMappings[DiscreteNotes(blackKeyIndices[i])]).toString())
+      note = DiscreteNotes(blackKeyIndices[i])
+      key.mappingLabel.setPlainText(QKeySequence(keyMappings[note]).toString())
+      for k, v in self.customMapping.iteritems():
+        if str(note) in str(v):
+          key.mappingLabel.setPlainText(QKeySequence(k).toString())
+          break
+        elif keyMappings[note] == k:
+          key.mappingLabel.setPlainText("")
+
+
 
     self.scene().update(self.scene().sceneRect())
 
@@ -235,18 +251,18 @@ class DigitalInstrumentWidget(QGraphicsView):
     #keys A-K map to notes G-F
     #keys W, E and T-U map to notes C#-A#
     self.noteDict = {
-      Qt.Key_Z: DiscreteNotes.C,
-      Qt.Key_X: DiscreteNotes.D,
-      Qt.Key_C: DiscreteNotes.E,
-      Qt.Key_A: DiscreteNotes.F,
-      Qt.Key_S: DiscreteNotes.G,
-      Qt.Key_D: DiscreteNotes.A,
-      Qt.Key_F: DiscreteNotes.B,
-      Qt.Key_Q: DiscreteNotes.Cs,
-      Qt.Key_W: DiscreteNotes.Ds,
-      Qt.Key_E: DiscreteNotes.Fs,
-      Qt.Key_R: DiscreteNotes.Gs,
-      Qt.Key_T: DiscreteNotes.As,
+      Qt.Key_Z: DiscreteNotes.C0,
+      Qt.Key_X: DiscreteNotes.D0,
+      Qt.Key_C: DiscreteNotes.E0,
+      Qt.Key_A: DiscreteNotes.F0,
+      Qt.Key_S: DiscreteNotes.G0,
+      Qt.Key_D: DiscreteNotes.A0,
+      Qt.Key_F: DiscreteNotes.B0,
+      Qt.Key_Q: DiscreteNotes.Cs0,
+      Qt.Key_W: DiscreteNotes.Ds0,
+      Qt.Key_E: DiscreteNotes.Fs0,
+      Qt.Key_R: DiscreteNotes.Gs0,
+      Qt.Key_T: DiscreteNotes.As0,
       Qt.Key_B: DiscreteNotes.C1,
       Qt.Key_N: DiscreteNotes.D1,
       Qt.Key_M: DiscreteNotes.E1,
