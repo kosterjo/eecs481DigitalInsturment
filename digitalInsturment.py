@@ -194,7 +194,7 @@ class DigitalInstrumentWidget(QGraphicsView):
       keyMappings[self.noteDict[k]] = k
 
     # Update color of white keys (pressed or not)
-    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23]
+    whiteKeyIndices = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 22]
     for i in range(len(self.whiteKeys)):
       key = self.whiteKeys[i]
       curNote = key.note
@@ -217,7 +217,7 @@ class DigitalInstrumentWidget(QGraphicsView):
           key.mappingLabel.setPlainText("")
 
     # Update color of black keys
-    blackKeyIndices = [1, 3, 6, 8, 10, 13, 15, 18, 20, 22]
+    blackKeyIndices = [1, 3, 6, 8, 10, 13, 15, 18, 20, 23]
     for i in range(len(self.blackKeys)):
       key = self.blackKeys[i]
       curNote = key.note
@@ -238,8 +238,6 @@ class DigitalInstrumentWidget(QGraphicsView):
           break
         elif keyMappings[note] == k:
           key.mappingLabel.setPlainText("")
-
-
 
     self.scene().update(self.scene().sceneRect())
 
