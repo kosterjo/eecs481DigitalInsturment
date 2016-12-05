@@ -24,7 +24,10 @@ mapping_notes = []
 class PianoKeyItem(QGraphicsRectItem):
   def mousePressEvent(self, event):
     if hasattr(self, 'note') and self.note is not None:
-      mapping_notes.append(self.note)
+      if not self.note in mapping_notes:
+        mapping_notes.append(self.note)
+      else:
+        mapping_notes.remove(self.note)
       self.instrumentWidget.updateUI()
 
 
@@ -447,9 +450,10 @@ class DigitalInstrumentWidget(QGraphicsView):
       self.updateUI()
 
   def resetButton(self):
+    global mapping_notes
     print("Reset Button Pressed")
-    mapping_notes = []
     self.customMapping = {}
+    mapping_notes = []
     self.updateUI()
     return
 
