@@ -175,7 +175,7 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     if self.customMapping:
       for key in self.customMapping:
-        chordMapString += chr(key) + ': '
+        chordMapString += QKeySequence(key).toString() + ': '
 
         for chord in self.customMapping[key]:
           chordMapString += chord.name
