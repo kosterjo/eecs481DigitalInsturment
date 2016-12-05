@@ -24,7 +24,10 @@ mapping_notes = []
 class PianoKeyItem(QGraphicsRectItem):
   def mousePressEvent(self, event):
     if hasattr(self, 'note') and self.note is not None:
-      mapping_notes.append(self.note)
+      if not self.note in mapping_notes:
+        mapping_notes.append(self.note)
+      else:
+        mapping_notes.remove(self.note)
       self.instrumentWidget.updateUI()
 
 
