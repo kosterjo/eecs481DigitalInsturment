@@ -449,9 +449,10 @@ class DigitalInstrumentWidget(QGraphicsView):
       self.updateUI()
 
   def resetButton(self):
+    global mapping_notes
     print("Reset Button Pressed")
-    mapping_notes = []
     self.customMapping = {}
+    mapping_notes = []
     self.updateUI()
     return
 
