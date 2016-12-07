@@ -214,8 +214,20 @@ class DigitalInstrumentWidget(QGraphicsView):
       key.mappingLabel.setPlainText(QKeySequence(keyMappings[note]).toString())
       for k, v in self.customMapping.iteritems():
         if str(note) in str(v):
-          key.mappingLabel.setPlainText(QKeySequence(k).toString())
+          if k == Qt.Key_Backspace:
+            key.mappingLabel.setPlainText("Bs")
+
+          elif k == Qt.Key_Shift:
+            key.mappingLabel.setPlainText("St")
+
+          elif k == Qt.Key_Control:
+            key.mappingLabel.setPlainText("Ct")
+
+          else:
+            key.mappingLabel.setPlainText(QKeySequence(k).toString())
+
           break
+
         elif keyMappings[note] == k:
           key.mappingLabel.setPlainText("")
 
@@ -237,8 +249,20 @@ class DigitalInstrumentWidget(QGraphicsView):
       key.mappingLabel.setPlainText(QKeySequence(keyMappings[note]).toString())
       for k, v in self.customMapping.iteritems():
         if str(note) in str(v):
-          key.mappingLabel.setPlainText(QKeySequence(k).toString())
+          if k == Qt.Key_Backspace:
+            key.mappingLabel.setPlainText("Bs")
+
+          elif k == Qt.Key_Shift:
+            key.mappingLabel.setPlainText("St")
+
+          elif k == Qt.Key_Control:
+            key.mappingLabel.setPlainText("Ct")
+
+          else: 
+            key.mappingLabel.setPlainText(QKeySequence(k).toString())
+          
           break
+
         elif keyMappings[note] == k:
           key.mappingLabel.setPlainText("")
 
