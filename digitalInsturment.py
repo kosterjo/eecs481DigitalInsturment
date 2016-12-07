@@ -175,7 +175,17 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     if self.customMapping:
       for key in self.customMapping:
-        chordMapString += QKeySequence(key).toString() + ': '
+        if key == Qt.Key_Backspace:
+          chordMapString += 'Bs: '
+
+        elif key == Qt.Key_Shift:
+          chordMapString += 'St: '
+
+        elif key == Qt.Key_Control:
+          chordMapString += 'Ct: '
+
+        else:
+          chordMapString += QKeySequence(key).toString() + ': '
 
         for chord in self.customMapping[key]:
           chordMapString += chord.name
