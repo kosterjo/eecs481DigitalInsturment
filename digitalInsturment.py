@@ -265,12 +265,12 @@ class DigitalInstrumentWidget(QGraphicsView):
       Qt.Key_K: DiscreteNotes.Gs0,
       Qt.Key_B: DiscreteNotes.As0,
       Qt.Key_L: DiscreteNotes.C1,
-      Qt.Key_Enter: DiscreteNotes.D1, # <-- Start key mappings here
+      Qt.Key_Return: DiscreteNotes.D1, # <-- Start key mappings here
       Qt.Key_Right: DiscreteNotes.E1,
       Qt.Key_Backspace: DiscreteNotes.F1,
       Qt.Key_Left: DiscreteNotes.G1,
       Qt.Key_Comma: DiscreteNotes.A1,
-      Qt.Key_Super: DiscreteNotes.B1,
+      Qt.Key_E: DiscreteNotes.B1,
       Qt.Key_M: DiscreteNotes.Cs1,
       Qt.Key_Down: DiscreteNotes.Ds1,
       Qt.Key_Delete: DiscreteNotes.Fs1,
@@ -281,10 +281,8 @@ class DigitalInstrumentWidget(QGraphicsView):
     #init octave dict to map to the number keys
     #key up and down are special cases caught by updateOctave
     self.octaveDict = {
-      Qt.Key_Up:   -2,
-      Qt.Key_Down: -1,
-      Qt.Key_1:     1,
-      Qt.Key_2:     2,
+      Qt.Key_1:     -1,
+      Qt.Key_2:     -2,
       Qt.Key_3:     3,
       Qt.Key_4:     4,
       Qt.Key_5:     5,
@@ -346,6 +344,7 @@ class DigitalInstrumentWidget(QGraphicsView):
   def noteMapper(self, key):
     #check custom mapping first, so it takes priority
     notes = []
+
     if key in self.customMapping:
       notes = self.customMapping[key]
 
@@ -389,7 +388,7 @@ class DigitalInstrumentWidget(QGraphicsView):
       fluidsynth.init(argument, "alsa")
       return True
 
-    elif key == Qt.Key_Space:
+    elif key == Qt.Key_T:
       if not pedal_pressed:
         pedal_pressed = True
 
@@ -399,7 +398,7 @@ class DigitalInstrumentWidget(QGraphicsView):
         create_sound.stop_all()
       return True
 
-    elif key == Qt.Key_Tab or key == Qt.Key_CapsLock:
+    elif key == Qt.Key_O:
       play_over = not play_over
       return True
 
