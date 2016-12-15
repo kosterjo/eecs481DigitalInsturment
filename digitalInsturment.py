@@ -177,17 +177,7 @@ class DigitalInstrumentWidget(QGraphicsView):
 
     if self.customMapping:
       for key in self.customMapping:
-        if key == Qt.Key_Backspace:
-          chordMapString += 'Bs: '
-
-        elif key == Qt.Key_Shift:
-          chordMapString += 'St: '
-
-        elif key == Qt.Key_Control:
-          chordMapString += 'Ct: '
-
-        else:
-          chordMapString += QKeySequence(key).toString() + ': '
+        chordMapString += QKeySequence(key).toString() + ': '
 
         for chord in self.customMapping[key]:
           chordMapString += chord.name
@@ -226,20 +216,8 @@ class DigitalInstrumentWidget(QGraphicsView):
       key.mappingLabel.setPlainText(QKeySequence(keyMappings[note]).toString())
       for k, v in self.customMapping.iteritems():
         if str(note) in str(v):
-          if k == Qt.Key_Backspace:
-            key.mappingLabel.setPlainText("Bs")
-
-          elif k == Qt.Key_Shift:
-            key.mappingLabel.setPlainText("St")
-
-          elif k == Qt.Key_Control:
-            key.mappingLabel.setPlainText("Ct")
-
-          else:
-            key.mappingLabel.setPlainText(QKeySequence(k).toString())
-
+          key.mappingLabel.setPlainText(QKeySequence(k).toString())
           break
-
         elif keyMappings[note] == k:
           key.mappingLabel.setPlainText("")
 
@@ -261,20 +239,8 @@ class DigitalInstrumentWidget(QGraphicsView):
       key.mappingLabel.setPlainText(QKeySequence(keyMappings[note]).toString())
       for k, v in self.customMapping.iteritems():
         if str(note) in str(v):
-          if k == Qt.Key_Backspace:
-            key.mappingLabel.setPlainText("Bs")
-
-          elif k == Qt.Key_Shift:
-            key.mappingLabel.setPlainText("St")
-
-          elif k == Qt.Key_Control:
-            key.mappingLabel.setPlainText("Ct")
-
-          else: 
-            key.mappingLabel.setPlainText(QKeySequence(k).toString())
-          
+          key.mappingLabel.setPlainText(QKeySequence(k).toString())
           break
-
         elif keyMappings[note] == k:
           key.mappingLabel.setPlainText("")
 
@@ -494,7 +460,8 @@ class DigitalInstrumentWidget(QGraphicsView):
     return
 
 def main():
-  fluidsynth.init("HS Synth Collection I.sf2", "alsa")
+  # fluidsynth.init("HS Synth Collection I.sf2", "alsa")
+  fluidsynth.init("Nice-Keys.sf2", "alsa")
   app = QApplication(sys.argv)
   window = DigitalInstrumentWidget()
   sys.exit(app.exec_())
